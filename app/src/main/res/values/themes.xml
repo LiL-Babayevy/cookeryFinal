@@ -1,0 +1,56 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.CookeryFinal" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/orange_red</item>
+        <item name="colorPrimaryVariant">@color/darker_pink</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/darker_pink</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="Theme.AddRecipe.ActionBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/white_blue</item>
+    </style>
+
+    <style name="Theme.DownLoadActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimaryVariant">@color/darker_pink</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:windowBackground">@color/orange_red</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/orange_red</item>
+    </style>
+
+    <style name="Theme.CookeryFinal.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.CookeryFinal.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.CookeryFinal.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="SecondTextIcon">
+        <item name="fontFamily">@font/regularicons</item>
+    </style>
+
+    <style name="TextIcon">
+        <item name="fontFamily">@font/icons</item>
+    </style>
+
+    <style name="TextFont_lemTue">
+        <item name="fontFamily">@font/lemon_tuesday</item>
+    </style>
+
+    <style name="IconColor">
+        <item name="android:drawable">@color/darker_pink</item>
+    </style>
+</resources>

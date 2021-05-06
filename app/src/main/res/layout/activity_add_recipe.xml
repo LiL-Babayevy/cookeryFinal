@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rellay"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/addRecipeSaveBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="save"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/orange_red"
+                    android:onClick="btnSaveClicked"/>
+
+                <Button
+                    android:id="@+id/addRecipePostBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="опубликовать"
+                    android:backgroundTint="@color/orange_red"
+                    android:onClick="btnPostClicked"/>
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/addRecipeName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="название"/>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                app:srcCompat="@drawable/no_image" />
+
+            <LinearLayout
+                android:id="@+id/addPageIngredientList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+
+            <TextView
+                android:paddingTop="15dp"
+                android:id="@+id/PlusTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/light_pink"
+                android:text="@string/fa_plus_circle"
+                style="@style/TextIcon"
+                android:textSize="40sp"
+                android:layout_gravity="right"/>
+
+            <EditText
+                android:id="@+id/addCookingSteps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="textMultiLine"
+                android:hint="cooking steps"
+                android:layout_marginBottom="35dp"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/white_blue"
+    android:id="@+id/logIn_layout"
+    android:layout_height="match_parent"
+    tools:context=".LogIn">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextFont_lemTue"
+            android:text="@string/cookery_title"
+            android:textColor="@color/orange_red"
+            android:textSize="50dp"
+            android:textStyle="bold"
+            android:layout_marginTop="160dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2" />
+
+        <EditText
+            android:id="@+id/email_logIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Логин:"
+            android:inputType="textEmailAddress"
+            android:textSize="18dp"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:id="@+id/password_logIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Пароль:"
+            android:inputType="textPassword"
+            android:textSize="18dp"
+            android:layout_marginTop="5dp"/>
+
+        <Button
+            android:id="@+id/logIn"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="ВОЙТИ"
+            android:onClick="logIn_clicked"
+            app:backgroundTint="@color/darker_pink" />
+
+        <TextView
+            android:id="@+id/no_acc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Все еще нет аккаунта?"
+            android:textSize="15dp"
+            android:layout_marginTop="60dp"/>
+
+        <TextView
+            android:id="@+id/register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:onClick="register_clicked"
+            android:text="Зарегистрируйтесь"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:text="или"
+            android:textAllCaps="false"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/continue_without_sgnIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="продолжите без регистрации*"
+            android:textSize="15dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="*некоторые функции будут недоступны"
+            android:textSize="15dp"
+            android:layout_marginTop="110dp"/>
+
+    </LinearLayout>
+</RelativeLayout>

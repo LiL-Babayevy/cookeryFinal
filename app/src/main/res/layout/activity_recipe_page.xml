@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_blue"
+    tools:context=".RecipePage">
+    <ScrollView
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="113dp"
+        tools:layout_editor_absoluteY="97dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/RecipePageImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/customborder"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/RecipePageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:textSize="18dp"
+                android:paddingLeft="55dp"
+                android:text="Название"
+                app:layout_constraintBottom_toBottomOf="@+id/RecipePageImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/RecipePageUserImage"
+                style="@style/SecondTextIcon"
+                android:layout_width="46dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="156dp"
+                android:textColor="@color/darker_pink"
+                android:gravity="center_horizontal|top"
+                android:text="@string/fa_user_circle"
+                android:textSize="36sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/Category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Category"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/RecipePageTitle" />
+
+            <TextView
+                android:id="@+id/RecipePageIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:layout_marginTop="32dp"
+                android:background="@color/darker_pink"
+                android:paddingLeft="2dp"
+                android:text="Ингредиенты:"
+                android:textColor="@color/white_pink"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/RecipePageImage" />
+
+            <TextView
+                android:id="@+id/RecipePageCookingSteps"
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:background="#F29C72"
+                android:paddingLeft="2dp"
+                android:text="Приготовление:"
+                android:textColor="@color/white_pink"
+                android:textSize="16sp"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/LinLayIng" />
+
+            <TextView
+                android:id="@+id/CookStepsTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/RecipePageCookingSteps"
+                app:layout_constraintTop_toBottomOf="@+id/RecipePageCookingSteps"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <LinearLayout
+                android:id="@+id/LinLayIng"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:layout_margin="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/RecipePageIngredients"></LinearLayout>
+
+            <TextView
+                android:id="@+id/CopyIcon"
+                style="@style/SecondTextIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="332dp"
+                android:layout_marginLeft="332dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/fa_copy"
+                android:textColor="@color/light_pink"
+                android:textSize="28dp"
+                android:onClick="copyRecipe"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/CookStepsTxt" />
+
+            <TextView
+                android:id="@+id/LikeIcon"
+                style="@style/SecondTextIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="@string/fa_heart"
+                android:textColor="@color/light_pink"
+                android:textSize="28dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginRight="8dp"
+                android:onClick="addToLikedRecipes"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</RelativeLayout>

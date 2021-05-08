@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Логин:"
+            android:hint="Логин:fghjkl"
             android:inputType="textEmailAddress"
             android:textSize="18dp"
             android:layout_marginTop="10dp"/>

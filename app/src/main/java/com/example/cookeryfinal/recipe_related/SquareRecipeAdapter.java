@@ -11,16 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookeryfinal.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapter.ViewHolder>{
 
-    private List<Recipe> recipeList;
-    private ItemClickListener mClickListener;
-    private LayoutInflater layoutInflater;
+    private ArrayList<Recipe> recipeList;
+    private OnRecipeListener onRecipeListener;
 
-    public SquareRecipeAdapter(List<Recipe> recipes){
+    public SquareRecipeAdapter(ArrayList<Recipe> recipes, OnRecipeListener onRecipeListener){
         this.recipeList = recipes;
+        this.onRecipeListener = onRecipeListener;
     }
 
 
@@ -28,8 +28,8 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
     @Override
     public SquareRecipeAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.recipe_rectangle, parent, false);
-        SquareRecipeAdapter.ViewHolder recipeViewHolder = new ViewHolder(v);
+                inflate(R.layout.recipe_square, parent, false);
+        SquareRecipeAdapter.ViewHolder recipeViewHolder = new ViewHolder(v, onRecipeListener);
         return recipeViewHolder;
     }
 
@@ -51,18 +51,35 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title;
         ImageView imageView;
+        OnRecipeListener onRecipeListener;
 
-        ViewHolder(View itemView) {
+        ViewHolder(View itemView, OnRecipeListener onRecipeListener) {
             super(itemView);
-            title = itemView.findViewById(R.id.recipeRect_title);
+            title = itemView.findViewById(R.id.recipeSquare_name);
             imageView = itemView.findViewById(R.id.recipeSquare_image);
+            this.onRecipeListener = onRecipeListener;
+
             itemView.setOnClickListener(this);
         }
 
         @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
+        public void onClick(View v) {
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onRecipeListener.onRecipeClick(getAdapterPosition());
+                }
+            });
+            v.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onRecipeListener.onRecipeLongClick(getAdapterPosition());
+                    return false;
+                }
+            });
         }
+
+
     }
 
     // convenience method for getting data at click position
@@ -70,13 +87,9 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
         return recipeList.get(id).getRecipe_name();
     }
 
-    // allows clicks events to be caught
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
+    public interface OnRecipeListener{
+        void onRecipeClick(int position);
+        void onRecipeLongClick(int position);
     }
 
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
-    }
 }

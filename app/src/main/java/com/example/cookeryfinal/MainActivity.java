@@ -1,27 +1,27 @@
 package com.example.cookeryfinal;
 
-import android.app.SearchManager;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cookeryfinal.ui.MyRecipesFragment;
 import com.example.cookeryfinal.ui.HomeFragment;
 import com.example.cookeryfinal.ui.DraftsFragment;
 import com.example.cookeryfinal.ui.SettingsFragment;
+import com.example.cookeryfinal.ui.ShoppingListFragment;
+import com.example.cookeryfinal.user_related.OnSingleUserRetrievedListener;
 import com.example.cookeryfinal.user_related.User;
 import com.example.cookeryfinal.user_related.UserAuth;
+import com.example.cookeryfinal.user_related.UserDataProvider;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     private UserAuth userAuth;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         userAuth = UserAuth.getInstance();
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,
@@ -57,10 +55,29 @@ public class MainActivity extends AppCompatActivity {
 
         NavigationView navigationView = findViewById(R.id.nav_view);
 
+
+
         View headerView = navigationView.getHeaderView(0);
         TextView navUsername = headerView.findViewById(R.id.textView);
+
+        if(userAuth.getCurrentUser() != null){
+            UserDataProvider userDataProvider = UserDataProvider.getInstance();
+            userDataProvider.getUser(userAuth.getCurrentUser().getUid(), new OnSingleUserRetrievedListener() {
+                @Override
+                public void OnSingleUserRetrieved(User user) {
+                    try{
+                        navUsername.setText(user.getName());
+                    }catch (NullPointerException e){
+                        Toast.makeText(getApplicationContext(), "USER = NULL" , Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+
+
+
+
         FirebaseUser user = userAuth.getCurrentUser();
-        navUsername.setText(user.getEmail());
         logOut = headerView.findViewById(R.id.LogOut);
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,6 +127,9 @@ public class MainActivity extends AppCompatActivity {
 //                    toolbar.setBackgroundResource(R.color.white_blue);
                     setTitle(item.getTitle());
                     f = new SettingsFragment();
+                } else if (item.getItemId() == R.id.nav_shop_list){
+                    setTitle(item.getTitle());
+                    f = new ShoppingListFragment();
                 }
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, f).commit();
@@ -127,4 +147,5 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }

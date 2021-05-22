@@ -41,6 +41,8 @@
 
         <ImageView
             android:id="@+id/recipeRect_image"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="3dp"
             android:layout_width="118dp"
             android:layout_height="104dp"
             app:srcCompat="@drawable/no_image" />

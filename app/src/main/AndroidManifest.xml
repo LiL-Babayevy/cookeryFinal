@@ -9,8 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CookeryFinal">
-        <activity android:name=".LogIn"/>
-        <activity android:name=".DownloadActivity" android:theme="@style/Theme.DownLoadActivity">
+        <activity android:name=".MyRecipeEdit"></activity>
+        <activity android:name=".LogIn" />
+        <activity
+            android:name=".DownloadActivity"
+            android:theme="@style/Theme.DownLoadActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,12 +22,14 @@
         </activity>
         <activity android:name=".Settings" />
         <activity android:name=".Register" />
-        <activity android:name=".recipe_related.AddRecipe" android:theme="@style/Theme.AddRecipe.ActionBar"/>
+        <activity
+            android:name=".recipe_related.AddRecipe"
+            android:theme="@style/Theme.AddRecipe.ActionBar" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CookeryFinal.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.CookeryFinal.NoActionBar"></activity>
+        <activity android:name=".recipe_related.RecipePage" />
     </application>
 
 </manifest>

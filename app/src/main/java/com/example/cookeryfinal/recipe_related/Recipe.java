@@ -9,28 +9,29 @@ public class Recipe {
     private String recipeID;
     private String ownerID;
     private String cooking_steps;
-    private int status; // recipe's status id
+    private String status; // recipe's status id
     private ArrayList<Ingredient> ingredients;
+    private String recipe_Category;
+    private final static String DRAFT = "draft";
 
-    public Recipe(){}
+    public Recipe(){
+        this.status = DRAFT;
+    }
 
     public Recipe(String recipe_name, String cooking_steps, ArrayList<Ingredient> ingredients /*,String ownerID*/) {
         this.recipe_name = recipe_name;
         this.cooking_steps = cooking_steps;
         this.ingredients = ingredients;
+        this.status = DRAFT;
         //this.ownerID = ownerID;
-
     }
 
     public String getRecipe_name() {
-        if(recipe_name == null){
-            return "lauraclass";
-        }
         return recipe_name;
     }
 
     public String RecipeToString(){
-        String recipe = "Ингредиенты:\n";
+        String recipe = recipe_name+"\n" + "Ингредиенты:\n";
         for(Ingredient i: getIngredients()){
             recipe += i.ingredient_name + " " +i.amount+"\n";
         }
@@ -38,6 +39,12 @@ public class Recipe {
         return recipe;
     }
 
+    public String getOwnerID() {
+        return ownerID;
+    }
+    public void setOwnerID(String ownerID) {
+        this.ownerID = ownerID;
+    }
 
     public String getCooking_steps() {
         return cooking_steps;
@@ -56,15 +63,25 @@ public class Recipe {
     public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
+    public void setIngredients(ArrayList<Ingredient> ingredients){
+        this.ingredients = ingredients;
+    }
 
-    public int getStatus() {
+    public String getStatus() {
         return status;
     }
-    public void setStatus(int status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
     public void setRecipe_name(String recipe_name) {
         this.recipe_name = recipe_name;
+    }
+
+    public String getRecipe_Category() {
+        return recipe_Category;
+    }
+    public void setRecipe_Category(String recipe_Category) {
+        this.recipe_Category = recipe_Category;
     }
 }

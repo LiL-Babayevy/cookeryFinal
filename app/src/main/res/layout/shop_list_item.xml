@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:id="@+id/shopListItem"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_margin="7dp">
+
+    <Button
+        android:id="@+id/DeleteItem"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:background="@drawable/delete_item"
+        android:layout_gravity="right"
+        android:layout_marginRight="5dp"/>
+
+    <TextView
+        android:id="@+id/TextViewItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:layout_gravity="center_vertical|left"/>
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/dotted_line"
+        android:layout_gravity="bottom"/>
+
+</FrameLayout>

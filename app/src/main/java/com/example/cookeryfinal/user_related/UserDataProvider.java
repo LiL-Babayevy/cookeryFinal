@@ -2,6 +2,7 @@ package com.example.cookeryfinal.user_related;
 
 import androidx.annotation.NonNull;
 
+import com.example.cookeryfinal.recipe_related.Recipe;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,36 +19,50 @@ public class UserDataProvider{
     private DatabaseReference users;
 
 
+
     private UserDataProvider() {
         db = FirebaseDatabase.getInstance();
         users = db.getReference().child("Users");
 
     }
 
+
+
     private static UserDataProvider provider = new UserDataProvider();
+
+    public DatabaseReference getUsers() {
+        return users;
+    }
 
     public static UserDataProvider getInstance() {
         return provider;
     }
 
 
-    public User getUser(String key) {
-        ArrayList<User> user_arrayList = new ArrayList<>();
-        OnUsersRetrievedListener user_listener = new OnUsersRetrievedListener() {
+    public User getUser(String key, OnSingleUserRetrievedListener listener) {
+        Query query = users.orderByChild("auth_key").equalTo(key);
+
+        query.addValueEventListener(new ValueEventListener() {
             @Override
-            public void OnUsersRetrieved(ArrayList<User> users) {
-                user_arrayList.clear();
-                user_arrayList.addAll(users);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User current_user = null;
+                for (DataSnapshot dataSnapshot_user : snapshot.getChildren()){
+                    current_user = dataSnapshot_user.getValue(User.class);
+                    break;
+                }
+                listener.OnSingleUserRetrieved(current_user);
             }
-        };
-        getUsers(user_listener);
-        for (User user : user_arrayList){
-            if(user.getKey() == key){
-                return user;
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
-        }
+        });
+
         return null;
     }
+
+
 
     public void getUsers(OnUsersRetrievedListener listener) {
         ArrayList<User> userArrayList = new ArrayList<>();
@@ -72,17 +87,31 @@ public class UserDataProvider{
         });
     }
 
-    public User getCurrentUserByKey(){
-        User user = getUser(userAuth.getmAuth().getCurrentUser().getUid());
-        return user;
+
+
+    public String getAuthUserKey(){
+        String userKey = userAuth.getmAuth().getCurrentUser().getUid();
+        return userKey;
+    }
+
+    public void setUserDatabaseKey(Recipe recipe){
+        getUser(getAuthUserKey(), new OnSingleUserRetrievedListener() {
+            @Override
+            public void OnSingleUserRetrieved(User user) {
+                recipe.setOwnerID(user.getDatabase_key());
+            }
+        });
     }
 
     public void updateUser(User u) {
-        users.child(u.getKey()).setValue(u);
-
+        users.child(u.getDatabase_key()).setValue(u);
     }
 
     public void deleteUser(User u) {
-        users.child(u.getKey()).removeValue();
+        users.child(u.getAuth_key()).removeValue();
+    }
+
+    public void deleteAll(){
+        users.removeValue();
     }
 }

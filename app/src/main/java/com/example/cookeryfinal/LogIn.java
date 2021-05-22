@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cookeryfinal.user_related.UserAuth;
@@ -35,6 +36,14 @@ public class LogIn extends AppCompatActivity {
         setContentView(R.layout.activity_log_in);
         userEmail = findViewById(R.id.email_logIn);
         userPassword = findViewById(R.id.password_logIn);
+        TextView no_user = findViewById(R.id.continue_without_sgnIn);
+        no_user.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void register_clicked(View v){

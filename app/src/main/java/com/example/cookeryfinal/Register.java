@@ -9,30 +9,35 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.cookeryfinal.recipe_related.DefaultRecipes;
 import com.example.cookeryfinal.user_related.User;
+import com.example.cookeryfinal.user_related.UserAuth;
+import com.example.cookeryfinal.user_related.UserDataProvider;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class Register extends AppCompatActivity {
 
     private EditText email, name, password1, password2;
-    private FirebaseAuth mAuth;
-    FirebaseDatabase db;
-    DatabaseReference users;
+//    private FirebaseAuth mAuth;
+//    FirebaseDatabase db;
+//    DatabaseReference users;
+    private UserDataProvider userDataProvider;
+    private UserAuth userAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mAuth = FirebaseAuth.getInstance();
-        db = FirebaseDatabase.getInstance();
-        users = db.getReference().child("Users");
+        userDataProvider = UserDataProvider.getInstance();
+        userAuth = UserAuth.getInstance();
+//        mAuth = FirebaseAuth.getInstance();
+//        db = FirebaseDatabase.getInstance();
+//        users = db.getReference().child("Users");
 
         email = findViewById(R.id.email_signIn);
         name = findViewById(R.id.name_signIn);
@@ -46,20 +51,23 @@ public class Register extends AppCompatActivity {
         user.setEmail(email.getText().toString());
         user.setName(name.getText().toString());
 
-        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password1.getText().toString())
+        userAuth.getmAuth().createUserWithEmailAndPassword(email.getText().toString(), password1.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser userAuth = mAuth.getCurrentUser();
-                            updateUI(userAuth);
-
-
+//                            FirebaseUser userAuth = userAuth.getmAuth().getCurrentUser();
+                            FirebaseUser user_firebase = userAuth.getmAuth().getCurrentUser();
+                            updateUI(user_firebase);
                             if(userAuth != null){
-                                user.setKey(userAuth.getUid());
+                                user.setAuth_key(userAuth.getmAuth().getUid());
                             }
-                            DatabaseReference push = users.push();
+                            DefaultRecipes.init();
+
+                            DatabaseReference push = userDataProvider.getUsers().push();
+                            user.setDatabase_key(push.getKey());
+                            user.setMy_recipes(DefaultRecipes.defaultrecipes);
                             push.setValue(user);
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
@@ -77,7 +85,7 @@ public class Register extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = userAuth.getmAuth().getCurrentUser();
         if(currentUser != null){
             reload();
         }

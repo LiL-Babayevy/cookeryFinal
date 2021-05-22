@@ -1,7 +1,5 @@
 package com.example.cookeryfinal.recipe_related;
 
-import com.example.cookeryfinal.recipe_categories.Breakfast;
-import com.example.cookeryfinal.recipe_categories.Dinner;
 
 import java.util.ArrayList;
 
@@ -24,7 +22,7 @@ public class DefaultRecipes {
         Recipe oatCrepe = new Recipe("oatCrepe", cook, oatcrpIng);
         oatCrepe.setRecipeId("1");
         DefaultRecipes.defaultrecipes.add(oatCrepe);
-        Dinner.DinnerRecipes.add(oatCrepe);
+
 
         Ingredient manka = new Ingredient("манка", "5 tbsp");
         Ingredient milk1 = new Ingredient("milk", "2 cups");
@@ -39,8 +37,6 @@ public class DefaultRecipes {
                 "готово!";
         Recipe porridge = new Recipe("mannaya kasha", steps, mannayakashaIng);
         porridge.setRecipeId("2");
-        Breakfast.BreakfastRecipes.add(porridge);
-        Dinner.DinnerRecipes.add(porridge);
         DefaultRecipes.defaultrecipes.add(porridge);
 
         Ingredient babana = new Ingredient("banana", "1");
@@ -54,7 +50,6 @@ public class DefaultRecipes {
         Recipe smoothie = new Recipe();
         smoothie.setCooking_steps(smoothieCook);
         smoothie.setRecipeId("3");
-        Breakfast.BreakfastRecipes.add(smoothie);
         DefaultRecipes.defaultrecipes.add(smoothie);
     }
 }

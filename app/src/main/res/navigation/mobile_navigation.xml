@@ -28,4 +28,10 @@
         android:name="com.example.cookeryfinal.ui.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/fragment_settings" />
+
+    <fragment
+        android:id="@+id/nav_shop_list"
+        android:name="com.example.cookeryfinal.ui.ShoppingListFragment"
+        android:label="@string/title_shopping_list"
+        tools:layout="@layout/fragment_shop_list"/>
 </navigation>

@@ -20,27 +20,35 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RectangleRecipeAdapter extends RecyclerView.Adapter<RectangleRecipeAdapter.RecipeViewHolder> implements Filterable {
+public class RectangleRecipeAdapter extends RecyclerView.Adapter<RectangleRecipeAdapter.RecipeViewHolder>{
 
-//    private Context context;
-//    private int resource;
-    private List<Recipe> recipes;
-    private List<Recipe> recipeArrayList_full;
+    private ArrayList<Recipe> recipes;
+    private OnRecipeListener onRecipeListener;
 
-    class RecipeViewHolder extends RecyclerView.ViewHolder{
+
+    class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView title;
         ImageView image;
+        OnRecipeListener listener;
 
-        RecipeViewHolder(View recipeView){
+        RecipeViewHolder(View recipeView, OnRecipeListener listener){
             super(recipeView);
             title = recipeView.findViewById(R.id.recipeRect_title);
             image = recipeView.findViewById(R.id.recipeRect_image);
+            this.listener = listener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onRecipeClick(getAdapterPosition());
         }
     }
 
-    public RectangleRecipeAdapter(List<Recipe> recipes){
+    public RectangleRecipeAdapter(ArrayList<Recipe> recipes, OnRecipeListener onRecipeListener){
         this.recipes = recipes;
-        recipeArrayList_full = new ArrayList<>(recipes);
+        this.onRecipeListener = onRecipeListener;
     }
 
     @NonNull
@@ -48,7 +56,7 @@ public class RectangleRecipeAdapter extends RecyclerView.Adapter<RectangleRecipe
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.recipe_rectangle, parent, false);
-        RecipeViewHolder recipeViewHolder = new RecipeViewHolder(v);
+        RecipeViewHolder recipeViewHolder = new RecipeViewHolder(v, onRecipeListener);
         return recipeViewHolder;
     }
 
@@ -65,63 +73,7 @@ public class RectangleRecipeAdapter extends RecyclerView.Adapter<RectangleRecipe
         return recipes.size();
     }
 
-
-
-//    public RectangleRecipeAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Recipe> recipes) {
-//        super(context, resource, recipes);
-//        this.context = context;
-//        this.resource = resource;
-//        this.recipes = recipes;
-//        recipeArrayList_full = new ArrayList<>(this.recipes);
-//    }
-
-//    @NonNull
-//    @Override
-//    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        View view = LayoutInflater.from(this.context).inflate(resource, null);
-//
-//        Recipe r = recipes.get(position);
-//
-////        ImageView image = view.findViewById(R.id.recipeRect_image);
-//        TextView recipeName = view.findViewById(R.id.recipeRect_title);
-////        image.setImageResource(R.drawable.no_image);
-//        recipeName.setText(r.getRecipe_name());
-//        return view;
-//    }
-
-
-    @Override
-    public Filter getFilter() {
-        return recipeFilter;
+    public interface OnRecipeListener{
+        void onRecipeClick(int position);
     }
-
-    private Filter recipeFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Recipe> filteredList = new ArrayList<>();
-
-            if(constraint == null || constraint.length() == 0){
-                filteredList.addAll(recipeArrayList_full);
-            } else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
-
-                for(Recipe recipe : recipeArrayList_full){
-                    if(recipe.getRecipe_name().toLowerCase().contains(filterPattern)){
-                        filteredList.add(recipe);
-                    }
-                }
-            }
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            recipes.clear();
-            recipes.addAll((List)results.values);
-            notifyDataSetChanged();
-        }
-    };
 }

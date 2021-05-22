@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/rellay"
+    android:id="@+id/RelativeEditRecipe"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -22,27 +22,25 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/addRecipeSaveBtn"
+                    android:id="@+id/SaveChanges"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="save"
+                    android:text="saveChanges"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/orange_red"
-                    android:onClick="btnSaveClicked"/>
+                    android:backgroundTint="@color/orange_red"/>
 
                 <Button
-                    android:id="@+id/addRecipePostBtn"
+                    android:id="@+id/SaveToDrafts"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="опубликовать"
-                    android:backgroundTint="@color/orange_red"
-                    android:onClick="btnPostClicked"/>
+                    android:text="save to drafts"
+                    android:backgroundTint="@color/orange_red"/>
 
             </LinearLayout>
 
             <EditText
-                android:id="@+id/addRecipeName"
+                android:id="@+id/editRecipeName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="название"/>
@@ -50,11 +48,11 @@
             <Spinner
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/CategorySpinner"
+                android:id="@+id/editCategorySpinner"
                 android:layout_gravity="right"/>
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/EditImageView"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:layout_gravity="center"
@@ -62,14 +60,14 @@
                 app:srcCompat="@drawable/no_image" />
 
             <LinearLayout
-                android:id="@+id/addPageIngredientList"
+                android:id="@+id/EditIngredientList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"></LinearLayout>
             <TextView
                 android:layout_weight="1"
                 android:paddingTop="15dp"
-                android:id="@+id/PlusTextView"
+                android:id="@+id/PlusIngredient"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/light_pink"
@@ -81,7 +79,7 @@
 
 
             <EditText
-                android:id="@+id/addCookingSteps"
+                android:id="@+id/editCookingSteps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"

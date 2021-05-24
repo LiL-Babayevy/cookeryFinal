@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -17,19 +16,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cookeryfinal.R;
-import com.example.cookeryfinal.user_related.OnSingleUserRetrievedListener;
 import com.example.cookeryfinal.user_related.User;
-import com.example.cookeryfinal.user_related.UserAuth;
 import com.example.cookeryfinal.user_related.UserDataProvider;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class AddRecipe extends AppCompatActivity {
     private UserDataProvider userDataProvider;
-    private String recipeCategory = null;
-    private User currentUser;
     private LinearLayout ingredients;
     private TextView plus;
     private Spinner category_spinner;
@@ -110,6 +103,9 @@ public class AddRecipe extends AppCompatActivity {
 
     public void btnSaveClicked(View view){
         recipe.setCooking_steps(cooking_steps.getText().toString());
+        EditText recipeName = findViewById(R.id.addRecipeName);
+        String recipeNameStr = recipeName.getText().toString();
+        recipe.setRecipe_name(recipeNameStr);
 
         recipe.setIngredients(new ArrayList<>());
         recipe.getIngredients().clear();
@@ -126,9 +122,9 @@ public class AddRecipe extends AppCompatActivity {
                 recipe.getIngredients().add(ingredient);
             }
         }
-        userDataProvider.setUserDatabaseKey(recipe);
+        recipe.setOwnerID(userDataProvider.getAuthUserKey());
+        getCategoryFromSpinner();
         recipeDataProvider.pushRecipe(recipe);
-//        recipe.setRecipe_Category(getCategoryFromSpinner());
 ////        currentUser.getDrafts().add(recipe);
 //        userDataProvider.getUser(userDataProvider.getAuthUserKey(), new OnSingleUserRetrievedListener() {
 //            @Override
@@ -171,16 +167,16 @@ public class AddRecipe extends AppCompatActivity {
             recipe.setRecipe_name(recipeNameStr);
             recipe.setCooking_steps(cookStepsStr);
             recipe.setIngredients(ingredient_list);
-            userDataProvider.setUserDatabaseKey(recipe);
+            recipe.setOwnerID(userDataProvider.getAuthUserKey());
             recipe.setStatus("my_recipes");
 
-            userDataProvider.getUser(userDataProvider.getAuthUserKey(), new OnSingleUserRetrievedListener() {
-                @Override
-                public void OnSingleUserRetrieved(User user) {
-                    user.getMy_recipes().add(recipe);
-                    userDataProvider.updateUser(user);
-                }
-            });
+//            userDataProvider.getUser(userDataProvider.getAuthUserKey(), new OnSingleUserRetrievedListener() {
+//                @Override
+//                public void OnSingleUserRetrieved(User user) {
+//                    user.getMy_recipes().add(recipe);
+//                    userDataProvider.updateUser(user);
+//                }
+//            });
             recipeDataProvider.pushRecipe(recipe);
 
         }else{

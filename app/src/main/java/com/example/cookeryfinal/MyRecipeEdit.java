@@ -34,7 +34,7 @@ public class MyRecipeEdit extends AppCompatActivity {
     private String recipe_key;
     private Spinner category_spinner;
     private LinearLayout ingredientList;
-    private ArrayList<Ingredient> ingredients;
+    private ArrayList<Ingredient> ingredients = new ArrayList<>();
     private String[] categories = {"завтрак", "обед", "ужин", "десерт"};
     private TextView plus;
 
@@ -72,10 +72,11 @@ public class MyRecipeEdit extends AppCompatActivity {
                 recipeDataProvider.getCurrentRecipe(recipe_key, new OnSingleRecipeRetrievedListener() {
                     @Override
                     public void onSingleRecipeRetrieved(Recipe retrieved_recipe) {
-                        try {
+//                        if(retrieved_recipe != null) {
+                            Recipe updated_recipe = new Recipe();
+                            updated_recipe.setRecipeId(retrieved_recipe.getRecipeId());
                             String name = editName.getText().toString();
                             String cookingSteps = editCookingSteps.getText().toString();
-                            retrieved_recipe.getIngredients().clear();
                             for(int i = 0; i < ingredientList.getChildCount(); i++){
                                 View frameIngredient = ingredientList.getChildAt(i);
                                 EditText ingTitle = frameIngredient.findViewById(R.id.editIngredientName);
@@ -88,12 +89,13 @@ public class MyRecipeEdit extends AppCompatActivity {
 
                                 if(!ingAmountStr.isEmpty() && !ingTitleStr.isEmpty()){
                                     Ingredient ingredient = new Ingredient(ingTitleStr, ingAmountStr);
-                                    retrieved_recipe.getIngredients().add(ingredient);
+                                    ingredients.add(ingredient);
                                     category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                         @Override
                                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                                             String category = (String)parent.getItemAtPosition(position);
-                                            retrieved_recipe.setRecipe_Category(category);
+                                            updated_recipe.setRecipe_Category(category);
+//                                            retrieved_recipe.setRecipe_Category(category);
                                         }
                                         @Override
                                         public void onNothingSelected(AdapterView<?> parent) {
@@ -106,16 +108,21 @@ public class MyRecipeEdit extends AppCompatActivity {
                                     checkIsEmpty(ingAmountStr, ingAmount);
                                 }
                                 if(!name.isEmpty() && !cookingSteps.isEmpty()){
-                                    recipeDataProvider.getRecipes_dr().child(recipe_key).child("recipe_name").setValue(name);
-                                    recipeDataProvider.getRecipes_dr().child(recipe_key).child("cooking_steps").setValue(cookingSteps);
-                                    recipeDataProvider.getRecipes_dr().child(recipe_key).child("category").setValue(retrieved_recipe.getRecipe_Category());
-                                    recipeDataProvider.getRecipes_dr().child(recipe_key).child("ingredients").setValue(retrieved_recipe.getIngredients());
+                                    updated_recipe.setRecipe_name(name);
+                                    updated_recipe.setCooking_steps(cookingSteps);
+                                    updated_recipe.setIngredients(ingredients);
+                                    recipeDataProvider.updateRecipe(updated_recipe);
+//                                    retrieved_recipe.getIngredients().clear();
+//                                    recipeDataProvider.getRecipes_dr().child(recipe_key).child("recipe_name").setValue(name);
+//                                    recipeDataProvider.getRecipes_dr().child(recipe_key).child("cooking_steps").setValue(cookingSteps);
+//                                    recipeDataProvider.getRecipes_dr().child(recipe_key).child("category").setValue(retrieved_recipe.getRecipe_Category());
+//                                    recipeDataProvider.getRecipes_dr().child(recipe_key).child("ingredients").setValue(ingredients);
                                 }
 
                             }
-                        }catch (NullPointerException e){
-                            Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
-                        }
+//                        }else{
+//                            Toast.makeText(getApplicationContext(), "failed 123", Toast.LENGTH_LONG).show();
+//                        }
                     }
                 });
             }
@@ -159,6 +166,42 @@ public class MyRecipeEdit extends AppCompatActivity {
         View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.edit_ingredient, null);
         EditText name = view.findViewById(R.id.editIngredientName);
         name.setHint("ingredient");
-         ingredientList.addView(view);
+        ingredientList.addView(view);
     }
+
+//    public void btnSaveChangesClicked(View v){
+//        recipeDataProvider.getCurrentRecipe(recipe_key, new OnSingleRecipeRetrievedListener() {
+//            @Override
+//            public void onSingleRecipeRetrieved(Recipe retrieved_recipe) {
+//                for(int i = 0; i < ingredientList.getChildCount(); i++){
+//                    View frameIngredient = ingredientList.getChildAt(i);
+//                    EditText ingTitle = frameIngredient.findViewById(R.id.editIngredientName);
+//                    String ingTitleStr = ingTitle.getText().toString();
+//                    checkIsEmpty(ingTitleStr, ingTitle);
+//
+//                    EditText ingAmount = frameIngredient.findViewById(R.id.editIngredientAmount);
+//                    String ingAmountStr = ingAmount.getText().toString();
+//                    checkIsEmpty(ingAmountStr, ingAmount);
+//
+//                    if(!ingAmountStr.isEmpty() && !ingTitleStr.isEmpty()){
+//                        Ingredient ingredient = new Ingredient(ingTitleStr, ingAmountStr);
+//                        ingredients.add(ingredient);
+//                    }else{
+//                        checkIsEmpty(ingTitleStr, ingTitle);
+//                        checkIsEmpty(ingAmountStr, ingAmount);
+//                    }
+//                }
+//                EditText recipeName = findViewById(R.id.addRecipeName);
+//                String recipeNameStr = recipeName.getText().toString();
+//                checkIsEmpty(recipeNameStr, recipeName);
+//
+//                String cookStepsStr = editCookingSteps.getText().toString();
+//                checkIsEmpty(cookStepsStr, editCookingSteps);
+//
+//                getCategoryFromSpinner();
+//                retrieved_recipe.setStatus("my_recipes");
+//                recipeDataProvider.pushRecipe(retrieved_recipe);
+//            }
+//        });
+//    }
 }

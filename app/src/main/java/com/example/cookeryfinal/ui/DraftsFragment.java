@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookeryfinal.GridSpacingItemDecoration;
 import com.example.cookeryfinal.LogIn;
+import com.example.cookeryfinal.MyRecipeEdit;
 import com.example.cookeryfinal.R;
 import com.example.cookeryfinal.Register;
 import com.example.cookeryfinal.recipe_related.OnRecipeRetrievedListener;
@@ -101,7 +102,10 @@ public class DraftsFragment extends Fragment implements SquareRecipeAdapter.OnRe
 
     @Override
     public void onRecipeClick(int position) {
-
+        Recipe recipe = recipeArrayList.get(position);
+        Intent intent = new Intent(getContext(), MyRecipeEdit.class);
+        intent.putExtra("recipe_key", recipe.getRecipeId());
+        startActivity(intent);
     }
 
     @Override

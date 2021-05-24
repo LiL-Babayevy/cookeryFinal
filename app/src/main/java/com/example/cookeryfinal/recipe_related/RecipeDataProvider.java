@@ -96,14 +96,9 @@ public class RecipeDataProvider {
                 for (DataSnapshot dataRecipe : snapshot.getChildren()) {
                     Recipe recipe = dataRecipe.getValue(Recipe.class);
                     try {
-                        userdata.getUser(userdata.getAuthUserKey(), new OnSingleUserRetrievedListener() {
-                            @Override
-                            public void OnSingleUserRetrieved(User user) {
-//                               if(recipe.getOwnerID().equals(userdata.getUsers().child(user.getDatabase_key()).getKey())){
-//                                   recipeArrayList.add(recipe);
-//                               }
-                            }
-                        });
+                        if(recipe.getOwnerID().equals(userdata.getAuthUserKey())) {
+                            recipeArrayList.add(recipe);
+                        }
                     }catch (NullPointerException e){
                         recipeArrayList.clear();
                     }

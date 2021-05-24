@@ -63,11 +63,9 @@ public class Register extends AppCompatActivity {
                             if(userAuth != null){
                                 user.setAuth_key(userAuth.getmAuth().getUid());
                             }
-                            DefaultRecipes.init();
 
                             DatabaseReference push = userDataProvider.getUsers().push();
                             user.setDatabase_key(push.getKey());
-                            user.setMy_recipes(DefaultRecipes.defaultrecipes);
                             push.setValue(user);
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);

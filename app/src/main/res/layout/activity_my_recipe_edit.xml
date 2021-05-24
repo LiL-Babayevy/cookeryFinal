@@ -27,7 +27,8 @@
                     android:layout_height="wrap_content"
                     android:text="saveChanges"
                     android:layout_weight="1"
-                    android:backgroundTint="@color/orange_red"/>
+                    android:backgroundTint="@color/orange_red"
+                    android:onClick="btnSaveChangesClicked"/>
 
                 <Button
                     android:id="@+id/SaveToDrafts"

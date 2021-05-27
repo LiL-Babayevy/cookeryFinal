@@ -37,25 +37,6 @@ public class RecipeDataProvider {
     }
 
 
-//    public Recipe getRecipe(String key) {
-//        ArrayList<Recipe> recipe_arrayList = new ArrayList<>();
-//        OnRecipeRetrievedListener recipe_listener = new OnRecipeRetrievedListener() {
-//            @Override
-//            public void onRecipeRetrieved(ArrayList<Recipe> recipes) {
-//                recipe_arrayList.clear();
-//                recipe_arrayList.addAll(recipes);
-//
-//            }
-//        };
-//        getRecipes(recipe_listener);
-//        for (Recipe recipe : recipe_arrayList){
-//            if(recipe.getRecipeId().equals(key)){
-//                return recipe;
-//            }
-//        }
-//        return null;
-//    }
-
     public void getMyRecipes(OnRecipeRetrievedListener listener) {
         ArrayList<Recipe> recipeArrayList = new ArrayList<>();
         Query query = recipes_dr.orderByChild("status").equalTo("my_recipes");
@@ -136,7 +117,7 @@ public class RecipeDataProvider {
     }
 
 
-    public void getRecipesByCategory(OnCategoryRecipesRetrievedListener listener, String category) {
+    public void getRecipesByCategory(OnRecipeRetrievedListener listener, String category) {
         ArrayList<Recipe> recipeArrayList = new ArrayList<>();
         Query query = recipes_dr.orderByChild("recipe_Category").equalTo(category);
         query.addValueEventListener(new ValueEventListener() {
@@ -147,7 +128,7 @@ public class RecipeDataProvider {
                     Recipe recipe = dataRecipe.getValue(Recipe.class);
                     recipeArrayList.add(recipe);
                 }
-                listener.onCategoryRecipeRetrieved(recipeArrayList);
+                listener.onRecipeRetrieved(recipeArrayList);
             }
 
             @Override
@@ -180,18 +161,16 @@ public class RecipeDataProvider {
         return null;
     }
 
-//    public User getCurrentUserByKey(){
-//        User user = getUser(userAuth.getmAuth().getCurrentUser().getUid());
-//        return user;
-//    }
-
     public void updateRecipe(Recipe r) {
         recipes_dr.child(r.getRecipeId()).setValue(r);
-
     }
 
     public void deleteRecipe(Recipe r) {
         recipes_dr.child(r.getRecipeId()).removeValue();
+    }
+
+    public void deleteAll(){
+        recipes_dr.removeValue();
     }
 
     public void pushRecipe(Recipe recipe){

@@ -33,6 +33,7 @@ public class LogIn extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_log_in);
         userEmail = findViewById(R.id.email_logIn);
         userPassword = findViewById(R.id.password_logIn);

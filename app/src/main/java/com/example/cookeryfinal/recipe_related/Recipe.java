@@ -84,4 +84,8 @@ public class Recipe {
     public void setRecipe_Category(String recipe_Category) {
         this.recipe_Category = recipe_Category;
     }
+
+    public void addIngredientToList(Ingredient ingredient){
+        this.getIngredients().add(ingredient);
+    }
 }

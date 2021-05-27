@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 }catch (NullPointerException e){
                     Intent intent = new Intent(getApplicationContext(), LogIn.class);
                     startActivity(intent);
+                    MainActivity.this.finish();
                 }
             }
         });

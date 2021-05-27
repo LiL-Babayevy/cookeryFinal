@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookeryfinal.GridSpacingItemDecoration;
 import com.example.cookeryfinal.LogIn;
-import com.example.cookeryfinal.MyRecipeEdit;
+import com.example.cookeryfinal.recipe_related.MyRecipeEdit;
 import com.example.cookeryfinal.R;
 import com.example.cookeryfinal.Register;
 import com.example.cookeryfinal.recipe_related.OnRecipeRetrievedListener;

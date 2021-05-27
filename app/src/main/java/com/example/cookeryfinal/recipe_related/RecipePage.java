@@ -1,5 +1,7 @@
 package com.example.cookeryfinal.recipe_related;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,11 +13,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cookeryfinal.R;
+import com.google.android.material.snackbar.Snackbar;
 
 public class RecipePage extends AppCompatActivity {
     private LinearLayout IngLayout;
     private RecipeDataProvider recipeDataProvider;
     private String recipe_key;
+    ClipboardManager clipboardManager;
+    ClipData clipData;
+    private TextView copyText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +29,25 @@ public class RecipePage extends AppCompatActivity {
         setContentView(R.layout.activity_recipe_page);
         Intent intent = getIntent();
         recipe_key = intent.getStringExtra("clicked_recipe");
+
+
+        clipboardManager=(ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
+        copyText = findViewById(R.id.CopyIcon);
+        copyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recipeDataProvider.getCurrentRecipe(recipe_key, new OnSingleRecipeRetrievedListener() {
+                    @Override
+                    public void onSingleRecipeRetrieved(Recipe retrieved_recipe) {
+                        String full_recipe = retrieved_recipe.RecipeToString();
+                        clipData = ClipData.newPlainText("text",full_recipe);
+                        clipboardManager.setPrimaryClip(clipData);
+                        Toast.makeText(getApplicationContext(), "рецепт скопирован!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
         IngLayout = findViewById(R.id.ListOfIngredients);
         recipeDataProvider = RecipeDataProvider.getInstance();
 

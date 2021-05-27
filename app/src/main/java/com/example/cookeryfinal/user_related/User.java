@@ -47,7 +47,6 @@ public class User {
     public ArrayList<Recipe> getMy_recipes() {
         return my_recipes;
     }
-
     public void setMy_recipes(ArrayList<Recipe> my_recipes) {
         this.my_recipes = my_recipes;
     }
@@ -55,7 +54,13 @@ public class User {
     public ArrayList<Recipe> getDrafts() {
         return drafts;
     }
+    public void setDrafts(ArrayList<Recipe> drafts) {
+        this.drafts = drafts;
+    }
 
+    public void setLiked(ArrayList<String> liked) {
+        this.liked = liked;
+    }
     public ArrayList<String> getLiked() {
         return liked;
     }

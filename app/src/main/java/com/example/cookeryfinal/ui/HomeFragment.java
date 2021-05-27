@@ -36,6 +36,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
     private View root;
 
     private ArrayList<Recipe> recipeArrayList;
+    private ArrayList<Recipe> recipeArrayList_byCategory;
     private ArrayList<Recipe> filtered_recipeArrayList;
     private RecyclerView mRecyclerView;
     private RecyclerView mRecyclerView_breakfast;
@@ -48,7 +49,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
     private RecipeDataProvider provider;
-    private OnCategoryRecipesRetrievedListener listener_category;
+    private OnRecipeRetrievedListener listener_category;
     private  OnRecipeRetrievedListener listener;
 
     public HomeFragment(){
@@ -58,6 +59,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         recipeArrayList = new ArrayList<>();
+        recipeArrayList_byCategory = new ArrayList<>();
 
         mRecyclerView = root.findViewById(R.id.recyclerView_search);
         mRecyclerView_breakfast = root.findViewById(R.id.recyclerView_breakfast);
@@ -67,18 +69,28 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
         mRecyclerView.setHasFixedSize(true);
         provider = RecipeDataProvider.getInstance();
 
-        ArrayList<Recipe> recipes_category = new ArrayList<>();
-        listener_category = new OnCategoryRecipesRetrievedListener() {
+//        listener_category = new OnCategoryRecipesRetrievedListener() {
+//            @Override
+//            public void onCategoryRecipeRetrieved(ArrayList<Recipe> recipes) {
+//                recipeArrayList_byCategory.clear();
+//                for(int i = recipes.size()-1; i>=0; i--){
+//                    recipeArrayList_byCategory.add(recipes.get(i));
+//                }
+//                sqr_recipe_adapter.notifyDataSetChanged();
+//            }
+//        };
+
+        listener_category = new OnRecipeRetrievedListener(){
             @Override
-            public void onCategoryRecipeRetrieved(ArrayList<Recipe> recipes) {
-                recipes_category.clear();
+            public void onRecipeRetrieved(ArrayList<Recipe> recipes) {
+                recipeArrayList_byCategory.clear();
                 for(int i = recipes.size()-1; i>=0; i--){
-                    recipes_category.add(recipes.get(i));
+                    recipeArrayList_byCategory.add(recipes.get(i));
                 }
-//                recipes_category.addAll(recipes);
                 sqr_recipe_adapter.notifyDataSetChanged();
             }
         };
+
 
         setHorizontalRecyclerView(mRecyclerView_breakfast, "завтрак");
         setHorizontalRecyclerView(mRecyclerView_lunch, "обед");
@@ -107,20 +119,6 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
         recipeArrayList.clear();
         mAdapter = new RectangleRecipeAdapter(recipeArrayList, this);
-
-        listener = new OnRecipeRetrievedListener() {
-            @Override
-            public void onRecipeRetrieved(ArrayList<Recipe> recipes) {
-                recipeArrayList.clear();
-                for(int i = recipes.size()-1; i>=0; i--){
-                    recipeArrayList.add(recipes.get(i));
-                }
-//                recipeArrayList.addAll(recipes);
-                mAdapter.notifyDataSetChanged();
-            }
-        };
-        provider.getRecipes(listener);
-
 
 
 
@@ -204,7 +202,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
 
 
     public void setHorizontalRecyclerView(RecyclerView recyclerView, String category){
-        sqr_recipe_adapter = new SquareRecipeAdapter(recipeArrayList, this);
+        sqr_recipe_adapter = new SquareRecipeAdapter(recipeArrayList_byCategory, this);
         provider.getRecipesByCategory(listener_category, category);
 
         mLayoutManager

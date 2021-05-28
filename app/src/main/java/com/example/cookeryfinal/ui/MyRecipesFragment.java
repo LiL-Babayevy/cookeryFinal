@@ -117,8 +117,7 @@ public class MyRecipesFragment extends Fragment implements SquareRecipeAdapter.O
     }
 
     @Override
-    public void onRecipeClick(int position) {
-        Recipe recipe = recipeArrayList.get(position);
+    public void onRecipeClick(Recipe recipe) {
         Intent intent = new Intent(getContext(), RecipePage.class);
         intent.putExtra("clicked_recipe", recipe.getRecipeId());
         startActivity(intent);

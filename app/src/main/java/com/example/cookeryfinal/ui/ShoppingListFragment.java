@@ -65,14 +65,7 @@ public class ShoppingListFragment extends Fragment {
                             item_nameEdit.setError("заполните поле");
                         }else{
                             addItemToList(item_name);
-                            userDataProvider.getUser(userDataProvider.getAuthUserKey(), new OnSingleUserRetrievedListener() {
-                                @Override
-                                public void OnSingleUserRetrieved(User user) {
-                                    user.getShoppingList().add(item_name);
-                                    userDataProvider.updateUser(user);
 
-                                }
-                            });
 //                            alertDialog.cancel();
                         }
 
@@ -111,5 +104,14 @@ public class ShoppingListFragment extends Fragment {
         TextView name_textView = view.findViewById(R.id.TextViewItemName);
         name_textView.setText(name);
         itemList.addView(view);
+
+        userDataProvider.getUser(userDataProvider.getAuthUserKey(), new OnSingleUserRetrievedListener() {
+            @Override
+            public void OnSingleUserRetrieved(User user) {
+                user.getShoppingList().add(name);
+                userDataProvider.updateUser(user);
+
+            }
+        });
     }
 }

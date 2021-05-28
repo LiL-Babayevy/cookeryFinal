@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookeryfinal.R;
-import com.example.cookeryfinal.recipe_related.OnCategoryRecipesRetrievedListener;
 import com.example.cookeryfinal.recipe_related.OnRecipeRetrievedListener;
 import com.example.cookeryfinal.recipe_related.Recipe;
 import com.example.cookeryfinal.recipe_related.RecipeDataProvider;
@@ -36,7 +35,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
     private View root;
 
     private ArrayList<Recipe> recipeArrayList;
-    private ArrayList<Recipe> recipeArrayList_byCategory;
+
     private ArrayList<Recipe> filtered_recipeArrayList;
     private RecyclerView mRecyclerView;
     private RecyclerView mRecyclerView_breakfast;
@@ -44,12 +43,10 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
     private RecyclerView mRecyclerView_dinner;
     private RecyclerView mRecyclerView_dessert;
     private RectangleRecipeAdapter mAdapter;
-    SquareRecipeAdapter sqr_recipe_adapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
     private RecipeDataProvider provider;
-    private OnRecipeRetrievedListener listener_category;
     private  OnRecipeRetrievedListener listener;
 
     public HomeFragment(){
@@ -59,7 +56,6 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         recipeArrayList = new ArrayList<>();
-        recipeArrayList_byCategory = new ArrayList<>();
 
         mRecyclerView = root.findViewById(R.id.recyclerView_search);
         mRecyclerView_breakfast = root.findViewById(R.id.recyclerView_breakfast);
@@ -68,28 +64,6 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
         mRecyclerView_dessert = root.findViewById(R.id.recyclerView_dessert);
         mRecyclerView.setHasFixedSize(true);
         provider = RecipeDataProvider.getInstance();
-
-//        listener_category = new OnCategoryRecipesRetrievedListener() {
-//            @Override
-//            public void onCategoryRecipeRetrieved(ArrayList<Recipe> recipes) {
-//                recipeArrayList_byCategory.clear();
-//                for(int i = recipes.size()-1; i>=0; i--){
-//                    recipeArrayList_byCategory.add(recipes.get(i));
-//                }
-//                sqr_recipe_adapter.notifyDataSetChanged();
-//            }
-//        };
-
-        listener_category = new OnRecipeRetrievedListener(){
-            @Override
-            public void onRecipeRetrieved(ArrayList<Recipe> recipes) {
-                recipeArrayList_byCategory.clear();
-                for(int i = recipes.size()-1; i>=0; i--){
-                    recipeArrayList_byCategory.add(recipes.get(i));
-                }
-                sqr_recipe_adapter.notifyDataSetChanged();
-            }
-        };
 
 
         setHorizontalRecyclerView(mRecyclerView_breakfast, "завтрак");
@@ -117,10 +91,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
         inflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-        recipeArrayList.clear();
         mAdapter = new RectangleRecipeAdapter(recipeArrayList, this);
-
-
 
         searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
@@ -132,6 +103,19 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
 
                 mLayoutManager = new LinearLayoutManager(getContext());
                 mRecyclerView.setLayoutManager(mLayoutManager);
+
+                listener = new OnRecipeRetrievedListener(){
+                    @Override
+                    public void onRecipeRetrieved(ArrayList<Recipe> recipes) {
+                        recipeArrayList.clear();
+                        for(int i = recipes.size()-1; i>=0; i--){
+                            recipeArrayList.add(recipes.get(i));
+                        }
+                        mAdapter.notifyDataSetChanged();
+                    }
+                };
+
+                provider.getRecipes(listener);
 
                 if (searchItem != null) {
                     searchView = (SearchView) searchItem.getActionView();
@@ -145,7 +129,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                             filtered_recipeArrayList = new ArrayList<>(recipeArrayList);
 
                             if (newText == null || newText.trim().isEmpty()) {
-                                mRecyclerView.setAdapter(mAdapter = new RectangleRecipeAdapter(recipeArrayList, HomeFragment.this::onRecipeClick));
+                                mRecyclerView.setAdapter(mAdapter);
                                 return false;
                             }
 
@@ -176,6 +160,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                 setHorizontalRecyclerView(mRecyclerView_lunch, "обед");
                 setHorizontalRecyclerView(mRecyclerView_dinner, "ужин");
                 setHorizontalRecyclerView(mRecyclerView_dessert, "десерт");
+
                 return true;
             }
         });
@@ -202,14 +187,41 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
 
 
     public void setHorizontalRecyclerView(RecyclerView recyclerView, String category){
-        sqr_recipe_adapter = new SquareRecipeAdapter(recipeArrayList_byCategory, this);
-        provider.getRecipesByCategory(listener_category, category);
+        ArrayList<Recipe> recipesByCategory = new ArrayList<>();
+        SquareRecipeAdapter squareRecipeAdapter = new SquareRecipeAdapter(recipesByCategory, this);
 
-        mLayoutManager
+        OnRecipeRetrievedListener recipe_listener = new OnRecipeRetrievedListener() {
+            @Override
+            public void onRecipeRetrieved(ArrayList<Recipe> recipes) {
+                recipesByCategory.clear();
+                for(int i = recipes.size()-1; i>=0; i--){
+                    if(recipes.get(i).getStatus().equals("my_recipes")){
+                        recipesByCategory.add(recipes.get(i));
+                    }
+                }
+                squareRecipeAdapter.notifyDataSetChanged();
+            }
+        };
+
+        provider.getRecipesByCategory(recipe_listener, category);
+
+        LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
 
-        recyclerView.setAdapter(sqr_recipe_adapter);
-        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setAdapter(squareRecipeAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+
+    @Override
+    public void onRecipeClick(Recipe recipe) {
+        Intent intent = new Intent(getContext(), RecipePage.class);
+        intent.putExtra("clicked_recipe", recipe.getRecipeId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRecipeLongClick(int position) {
     }
 
     @Override
@@ -218,10 +230,5 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
         Intent intent = new Intent(getContext(), RecipePage.class);
         intent.putExtra("clicked_recipe", recipe.getRecipeId());
         startActivity(intent);
-    }
-
-    @Override
-    public void onRecipeLongClick(int position) {
-
     }
 }

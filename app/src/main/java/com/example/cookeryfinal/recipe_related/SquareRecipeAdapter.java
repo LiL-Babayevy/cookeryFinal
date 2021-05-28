@@ -1,9 +1,12 @@
 package com.example.cookeryfinal.recipe_related;
 
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +24,7 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
     public SquareRecipeAdapter(ArrayList<Recipe> recipes, OnRecipeListener onRecipeListener){
         this.recipeList = recipes;
         this.onRecipeListener = onRecipeListener;
+
     }
 
 
@@ -38,6 +42,7 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
         Recipe current_recipe = recipeList.get(position);
 
         holder.imageView.setImageResource(R.drawable.no_image);
+
         holder.title.setText(current_recipe.getRecipe_name());
     }
 
@@ -57,8 +62,11 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
             super(itemView);
             title = itemView.findViewById(R.id.recipeSquare_name);
             imageView = itemView.findViewById(R.id.recipeSquare_image);
+            int height = getScreenHeight()/11 * 2; // ((display.getWidth()*20)/100)
+            int width = getScreenWidth()/7*2;
+            LinearLayout.LayoutParams parms = new LinearLayout.LayoutParams(height, width);
+            imageView.setLayoutParams(parms);
             this.onRecipeListener = onRecipeListener;
-
             itemView.setOnClickListener(this);
         }
 
@@ -67,7 +75,7 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    onRecipeListener.onRecipeClick(getAdapterPosition());
+                    onRecipeListener.onRecipeClick(recipeList.get(getAdapterPosition()));
                 }
             });
             v.setOnLongClickListener(new View.OnLongClickListener() {
@@ -88,8 +96,15 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
     }
 
     public interface OnRecipeListener{
-        void onRecipeClick(int position);
+        void onRecipeClick(Recipe recipe);
         void onRecipeLongClick(int position);
     }
 
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
+    }
 }

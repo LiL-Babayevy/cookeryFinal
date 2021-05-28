@@ -3,6 +3,7 @@
 <ScrollView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/white_blue"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -15,10 +16,6 @@
     tools:context=".ui.HomeFragment"
     android:paddingBottom="60dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="завтраки"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_search"
@@ -26,43 +23,86 @@
         android:layout_height="match_parent"
         android:layout_margin="4dp"/>
 
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_breakfast"
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:background="@color/white_blue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-    <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView_lunch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-    <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView_dinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-    <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView_dessert"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="4dp"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
-</LinearLayout>
-<!--    <ListView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:id="@+id/listView_rectangle"/>-->
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:textColor="@color/orange_red"
+            android:textStyle="bold"
+            android:text="Завтраки"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_breakfast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:textColor="@color/orange_red"
+            android:textStyle="bold"
+            android:text="Обеды"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_lunch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:textColor="@color/orange_red"
+            android:textStyle="bold"
+            android:text="Ужины"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_dinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textSize="20sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:textColor="@color/orange_red"
+            android:textStyle="bold"
+            android:text="Десерты"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_dessert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+    </LinearLayout>
 
 </RelativeLayout>
 </ScrollView>

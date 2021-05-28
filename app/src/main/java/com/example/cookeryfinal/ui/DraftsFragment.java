@@ -101,8 +101,7 @@ public class DraftsFragment extends Fragment implements SquareRecipeAdapter.OnRe
     }
 
     @Override
-    public void onRecipeClick(int position) {
-        Recipe recipe = recipeArrayList.get(position);
+    public void onRecipeClick(Recipe recipe) {
         Intent intent = new Intent(getContext(), MyRecipeEdit.class);
         intent.putExtra("recipe_key", recipe.getRecipeId());
         startActivity(intent);

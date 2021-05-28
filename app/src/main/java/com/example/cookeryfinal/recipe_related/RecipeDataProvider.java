@@ -119,8 +119,24 @@ public class RecipeDataProvider {
 
     public void getRecipesByCategory(OnRecipeRetrievedListener listener, String category) {
         ArrayList<Recipe> recipeArrayList = new ArrayList<>();
-        Query query = recipes_dr.orderByChild("recipe_Category").equalTo(category);
-        query.addValueEventListener(new ValueEventListener() {
+        Query query_category = recipes_dr;
+
+        switch(category){
+            case "завтрак":
+                query_category = recipes_dr.orderByChild("recipe_Category").equalTo("завтрак");
+                break;
+            case "обед":
+                query_category = recipes_dr.orderByChild("recipe_Category").equalTo("обед");
+                break;
+            case "ужин":
+                query_category = recipes_dr.orderByChild("recipe_Category").equalTo("ужин");
+                break;
+            case "десерт":
+                query_category = recipes_dr.orderByChild("recipe_Category").equalTo("десерт");
+                break;
+        }
+
+        query_category.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 recipeArrayList.clear();
@@ -137,7 +153,6 @@ public class RecipeDataProvider {
             }
         });
     }
-
 
     public Recipe getCurrentRecipe(String key, OnSingleRecipeRetrievedListener listener) {
         Query query = recipes_dr.orderByChild("recipeId").equalTo(key);

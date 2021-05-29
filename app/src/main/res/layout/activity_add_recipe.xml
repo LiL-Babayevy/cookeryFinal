@@ -56,10 +56,21 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="300dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="15dp"
-                app:srcCompat="@drawable/no_image" />
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                app:srcCompat="@drawable/no_image"
+                android:onClick="setImage"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:background="@color/darker_pink"
+                android:paddingLeft="2dp"
+                android:text="@string/ingredients"
+                android:textColor="@color/white_pink"
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:id="@+id/addPageIngredientList"
@@ -79,6 +90,15 @@
                 android:layout_gravity="right"/>
 
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="28dp"
+                android:background="#F29C72"
+                android:paddingLeft="2dp"
+                android:text="@string/cookingsteps"
+                android:textColor="@color/white_pink"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/addCookingSteps"
@@ -87,7 +107,7 @@
                 android:ems="10"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
-                android:hint="cooking steps"
+                android:hint="@string/cookingsteps"
                 android:layout_marginBottom="35dp"/>
 
 

@@ -1,27 +1,39 @@
 package com.example.cookeryfinal.recipe_related;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cookeryfinal.R;
+import com.example.cookeryfinal.ui.MyRecipesFragment;
 import com.example.cookeryfinal.user_related.User;
 import com.example.cookeryfinal.user_related.UserDataProvider;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class AddRecipe extends AppCompatActivity {
+    private ImageView set_image;
     private UserDataProvider userDataProvider;
     private LinearLayout ingredients;
     private TextView plus;
@@ -31,6 +43,7 @@ public class AddRecipe extends AppCompatActivity {
     private String[] categories = {"завтрак", "обед", "ужин", "десерт"};
     private Recipe recipe = new Recipe();
     private RecipeDataProvider recipeDataProvider;
+    private ArrayList<Button> listOfButt = new ArrayList<>();
 
 
     @Override
@@ -39,6 +52,8 @@ public class AddRecipe extends AppCompatActivity {
         setTitle("Добавление рецепта");
         setContentView(R.layout.activity_add_recipe);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        set_image = findViewById(R.id.imageView);
 
         recipeDataProvider = RecipeDataProvider.getInstance();
 
@@ -76,6 +91,17 @@ public class AddRecipe extends AppCompatActivity {
             }
         });
 
+
+        for(int i = 0; i < ingredients.getChildCount(); i++){
+            View frameIngredient = ingredients.getChildAt(i);
+            Button b = frameIngredient.findViewById(R.id.DeleteIngredient);
+            b.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ingredients.removeView(frameIngredient);
+                }
+            });
+        }
     }
 
     @Override
@@ -98,6 +124,8 @@ public class AddRecipe extends AppCompatActivity {
         View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.edit_ingredient, null);
         EditText name = view.findViewById(R.id.editIngredientName);
         name.setHint("ingredient");
+//        Button delete = view.findViewById(R.id.DeleteIngredient);
+//        listOfButt.add(delete);
         return view;
     }
 
@@ -170,14 +198,8 @@ public class AddRecipe extends AppCompatActivity {
             recipe.setOwnerID(userDataProvider.getAuthUserKey());
             recipe.setStatus("my_recipes");
 
-//            userDataProvider.getUser(userDataProvider.getAuthUserKey(), new OnSingleUserRetrievedListener() {
-//                @Override
-//                public void OnSingleUserRetrieved(User user) {
-//                    user.getMy_recipes().add(recipe);
-//                    userDataProvider.updateUser(user);
-//                }
-//            });
             recipeDataProvider.pushRecipe(recipe);
+            AddRecipe.this.finish();
 
         }else{
             Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_LONG).show();
@@ -193,6 +215,48 @@ public class AddRecipe extends AppCompatActivity {
     public void checkIsEmpty(String s, EditText edit){
         if(s.isEmpty()){
             edit.setError("заполните поле");
+        }
+    }
+
+
+    public void setImage(View v){
+        String[] options = new String[]{"Сделать фото", "Загрузить из галереи"};
+        AlertDialog.Builder image_set_dialog = new AlertDialog.Builder(this);
+        image_set_dialog.setTitle("set photo");
+        image_set_dialog.setItems(options, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0){
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, 0);
+                }else if(which == 1){
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, 1);
+                }
+            }
+        });
+        image_set_dialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK && data != null){
+            if(requestCode == 0){
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                recipeDataProvider.saveImageToFB(bitmap, recipe);
+                set_image.setImageBitmap(bitmap);
+                recipeDataProvider.pushRecipe(recipe);
+            } else if(requestCode == 1){
+                try {
+                    InputStream is = getContentResolver().openInputStream(data.getData());
+                    Bitmap bitmap = BitmapFactory.decodeStream(is);
+                    recipeDataProvider.saveImageToFB(bitmap, recipe);
+                    set_image.setImageBitmap(bitmap);
+                    recipeDataProvider.pushRecipe(recipe);
+                }catch (Exception e){}
+            }
         }
     }
 }

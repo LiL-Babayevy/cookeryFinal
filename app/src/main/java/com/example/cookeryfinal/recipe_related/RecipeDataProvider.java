@@ -1,5 +1,8 @@
 package com.example.cookeryfinal.recipe_related;
 
+import android.graphics.Bitmap;
+import android.util.Base64;
+
 import androidx.annotation.NonNull;
 
 import com.example.cookeryfinal.user_related.OnSingleUserRetrievedListener;
@@ -12,6 +15,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class RecipeDataProvider {
@@ -193,5 +197,14 @@ public class RecipeDataProvider {
         String recipeId = recipe_push.getKey();
         recipe.setRecipeId(recipeId);
         recipe_push.setValue(recipe);
+    }
+
+    public void saveImageToFB(Bitmap bitmap, Recipe recipe){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        String encoded = Base64.encodeToString(bytes, Base64.DEFAULT);
+
+        recipe.setImage(encoded);
     }
 }

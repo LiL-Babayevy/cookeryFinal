@@ -3,9 +3,13 @@ package com.example.cookeryfinal.recipe_related;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +65,13 @@ public class RecipePage extends AppCompatActivity {
                     cookingSteps.setText(retrieved_recipe.getCooking_steps());
                     TextView category = findViewById(R.id.Category);
                     category.setText(retrieved_recipe.getRecipe_Category());
+
+                    ImageView recipe_image = findViewById(R.id.RecipePageImage);
+                    if(retrieved_recipe.getImage() != null){
+                        byte[] decodedString = Base64.decode(retrieved_recipe.getImage(), Base64.DEFAULT);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString,0, decodedString.length);
+                        recipe_image.setImageBitmap(bitmap);
+                    }
 
                     for(Ingredient ingredient: retrieved_recipe.getIngredients()) {
                         IngLayout.addView(addIngredient(ingredient));

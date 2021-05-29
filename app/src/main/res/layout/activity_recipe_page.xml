@@ -37,7 +37,7 @@
                     android:id="@+id/RecipePageTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="35dp"
-                    android:textSize="22dp"
+                    android:textSize="22sp"
                     android:gravity="center_vertical"
                     app:layout_constraintVertical_bias="1.0"
                     android:layout_weight="7"/>
@@ -50,19 +50,15 @@
                     android:text="@string/fa_heart"
                     android:gravity="right"
                     android:textColor="@color/light_pink"
-                    android:textSize="28dp"
+                    android:textSize="28sp"
                     android:layout_weight="1"/>
 
             </LinearLayout>
 
-            <TextView
+            <ImageView
                 android:id="@+id/RecipePageImage"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@drawable/customborder"
-                android:text="TextView"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintVertical_bias="0.0" />
+                android:layout_height="300dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,14 +68,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Категория: "
-                    android:layout_weight="1"/>
+                    android:text="@string/category"
+                    android:layout_weight="1"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/Category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Category"
                     android:gravity="right"
                     android:layout_weight="1"/>
             </LinearLayout>
@@ -90,7 +86,7 @@
                 android:layout_height="28dp"
                 android:background="@color/darker_pink"
                 android:paddingLeft="2dp"
-                android:text="Ингредиенты:"
+                android:text="@string/ingredients"
                 android:textColor="@color/white_pink"
                 android:textStyle="bold" />
 
@@ -106,7 +102,7 @@
                 android:layout_height="28dp"
                 android:background="#F29C72"
                 android:paddingLeft="2dp"
-                android:text="Приготовление:"
+                android:text="@string/cookingsteps"
                 android:textColor="@color/white_pink"
                 android:layout_marginTop="5dp"
                 android:textStyle="bold" />
@@ -115,11 +111,7 @@
                 android:id="@+id/CookStepsTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="TextView"
-                app:layout_constraintVertical_bias="0.0" />
-
-
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:id="@+id/CopyIcon"
@@ -128,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/fa_copy"
                 android:textColor="@color/light_pink"
-                android:textSize="28dp" />
+                android:textSize="28sp" />
 
 
 

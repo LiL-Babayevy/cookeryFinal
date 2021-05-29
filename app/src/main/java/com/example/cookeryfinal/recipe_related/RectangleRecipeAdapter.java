@@ -1,6 +1,9 @@
 package com.example.cookeryfinal.recipe_related;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +67,13 @@ public class RectangleRecipeAdapter extends RecyclerView.Adapter<RectangleRecipe
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe current_recipe = recipes.get(position);
 
-        holder.image.setImageResource(R.drawable.no_image);
+        if(current_recipe.getImage() != null) {
+//            holder.image.setImageResource(R.drawable.no_image);
+//        } else{
+            byte[] decodedString = Base64.decode(current_recipe.getImage(), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString,0, decodedString.length);
+            holder.image.setImageBitmap(bitmap);
+        }
         holder.title.setText(current_recipe.getRecipe_name());
     }
 

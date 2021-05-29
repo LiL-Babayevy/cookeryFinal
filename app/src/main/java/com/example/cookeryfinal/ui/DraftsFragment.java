@@ -21,6 +21,7 @@ import com.example.cookeryfinal.Register;
 import com.example.cookeryfinal.recipe_related.OnRecipeRetrievedListener;
 import com.example.cookeryfinal.recipe_related.Recipe;
 import com.example.cookeryfinal.recipe_related.RecipeDataProvider;
+import com.example.cookeryfinal.recipe_related.RecipePage;
 import com.example.cookeryfinal.recipe_related.SquareRecipeAdapter;
 import com.example.cookeryfinal.user_related.UserAuth;
 
@@ -111,4 +112,5 @@ public class DraftsFragment extends Fragment implements SquareRecipeAdapter.OnRe
     public void onRecipeLongClick(int position) {
 
     }
+
 }

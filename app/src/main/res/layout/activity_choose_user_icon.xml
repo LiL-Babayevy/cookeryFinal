@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChooseUserIcon">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:text="Выберите иконку для профиля:"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ImageBoyChef"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/boy_chef"
+                android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/ImageBossChef"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/chef"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/ImageGirlChef"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/girl_chef" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ImageRollingPin"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/rolling_pin"
+                android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/ImageBeater"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/beater"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/ImageOven"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/oven" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ImageIceCream"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/ice_cream"
+                android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/ImageCookies"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/cookies"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/ImageCroissant"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/croissant" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ImageSausage"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/sausage"
+                android:layout_weight="1"/>
+            <ImageView
+                android:id="@+id/ImagePizza"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                app:srcCompat="@drawable/pizza"
+                android:layout_weight="1"/>
+
+            <ImageView
+                android:id="@+id/ImageSushi"
+                android:layout_margin="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/sushi" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

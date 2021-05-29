@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +36,6 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
     private View root;
 
     private ArrayList<Recipe> recipeArrayList;
-
     private ArrayList<Recipe> filtered_recipeArrayList;
     private RecyclerView mRecyclerView;
     private RecyclerView mRecyclerView_breakfast;
@@ -48,6 +48,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
     private SearchView.OnQueryTextListener queryTextListener;
     private RecipeDataProvider provider;
     private  OnRecipeRetrievedListener listener;
+    private TextView breakfast_txt, lunch_txt, dinner_txt, dessert_txt;
 
     public HomeFragment(){
     }
@@ -56,6 +57,11 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         recipeArrayList = new ArrayList<>();
+
+        breakfast_txt = root.findViewById(R.id.breakfast_text);
+        lunch_txt = root.findViewById(R.id.lunch_Text);
+        dinner_txt = root.findViewById(R.id.dinner_Text);
+        dessert_txt = root.findViewById(R.id.dessert_Text);
 
         mRecyclerView = root.findViewById(R.id.recyclerView_search);
         mRecyclerView_breakfast = root.findViewById(R.id.recyclerView_breakfast);
@@ -101,6 +107,11 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                 mRecyclerView_dessert.setAdapter(null);
                 mRecyclerView_lunch.setAdapter(null);
 
+                breakfast_txt.setVisibility(View.INVISIBLE);
+                lunch_txt.setVisibility(View.INVISIBLE);
+                dessert_txt.setVisibility(View.INVISIBLE);
+                dinner_txt.setVisibility(View.INVISIBLE);
+
                 mLayoutManager = new LinearLayoutManager(getContext());
                 mRecyclerView.setLayoutManager(mLayoutManager);
 
@@ -114,7 +125,6 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                         mAdapter.notifyDataSetChanged();
                     }
                 };
-
                 provider.getRecipes(listener);
 
                 if (searchItem != null) {
@@ -129,12 +139,13 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                             filtered_recipeArrayList = new ArrayList<>(recipeArrayList);
 
                             if (newText == null || newText.trim().isEmpty()) {
+                                mAdapter = new RectangleRecipeAdapter(recipeArrayList, HomeFragment.this::onRecipeClick);
                                 mRecyclerView.setAdapter(mAdapter);
                                 return false;
                             }
 
                             for(Recipe r : recipeArrayList){
-                                if(!(r.getRecipe_name().contains(newText))){
+                                if(!(r.getRecipe_name().contains(newText.trim()))){
                                     filtered_recipeArrayList.remove(r);
                                 }
                             }
@@ -156,6 +167,12 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 mRecyclerView.setAdapter(null);
+
+                breakfast_txt.setVisibility(View.VISIBLE);
+                lunch_txt.setVisibility(View.VISIBLE);
+                dessert_txt.setVisibility(View.VISIBLE);
+                dinner_txt.setVisibility(View.VISIBLE);
+
                 setHorizontalRecyclerView(mRecyclerView_breakfast, "завтрак");
                 setHorizontalRecyclerView(mRecyclerView_lunch, "обед");
                 setHorizontalRecyclerView(mRecyclerView_dinner, "ужин");

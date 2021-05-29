@@ -1,6 +1,9 @@
 package com.example.cookeryfinal.recipe_related;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +27,6 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
     public SquareRecipeAdapter(ArrayList<Recipe> recipes, OnRecipeListener onRecipeListener){
         this.recipeList = recipes;
         this.onRecipeListener = onRecipeListener;
-
     }
 
 
@@ -41,8 +43,11 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
     public void onBindViewHolder(@NonNull SquareRecipeAdapter.ViewHolder holder, int position) {
         Recipe current_recipe = recipeList.get(position);
 
-        holder.imageView.setImageResource(R.drawable.no_image);
-
+        if(current_recipe.getImage() != null) {
+            byte[] decodedString = Base64.decode(current_recipe.getImage(), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString,0, decodedString.length);
+            holder.imageView.setImageBitmap(bitmap);
+        }
         holder.title.setText(current_recipe.getRecipe_name());
     }
 
@@ -68,17 +73,8 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
             imageView.setLayoutParams(parms);
             this.onRecipeListener = onRecipeListener;
             itemView.setOnClickListener(this);
-        }
 
-        @Override
-        public void onClick(View v) {
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onRecipeListener.onRecipeClick(recipeList.get(getAdapterPosition()));
-                }
-            });
-            v.setOnLongClickListener(new View.OnLongClickListener() {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     onRecipeListener.onRecipeLongClick(getAdapterPosition());
@@ -87,6 +83,10 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
             });
         }
 
+        @Override
+        public void onClick(View v) {
+            onRecipeListener.onRecipeClick(recipeList.get(getAdapterPosition()));
+        }
 
     }
 

@@ -1,7 +1,5 @@
 package com.example.cookeryfinal.recipe_related;
 
-import com.example.cookeryfinal.recipe_related.Ingredient;
-
 import java.util.ArrayList;
 
 public class Recipe {
@@ -9,21 +7,22 @@ public class Recipe {
     private String recipeID;
     private String ownerID;
     private String cooking_steps;
-    private String status; // recipe's status id
+    private String status;
     private ArrayList<Ingredient> ingredients;
     private String recipe_Category;
     private final static String DRAFT = "draft";
+    private String image;
 
     public Recipe(){
         this.status = DRAFT;
+        image = null;
     }
 
-    public Recipe(String recipe_name, String cooking_steps, ArrayList<Ingredient> ingredients /*,String ownerID*/) {
+    public Recipe(String recipe_name, String cooking_steps, ArrayList<Ingredient> ingredients) {
         this.recipe_name = recipe_name;
         this.cooking_steps = cooking_steps;
         this.ingredients = ingredients;
         this.status = DRAFT;
-        //this.ownerID = ownerID;
     }
 
     public String getRecipe_name() {
@@ -63,6 +62,8 @@ public class Recipe {
     public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
+
+
     public void setIngredients(ArrayList<Ingredient> ingredients){
         this.ingredients = ingredients;
     }
@@ -87,5 +88,17 @@ public class Recipe {
 
     public void addIngredientToList(Ingredient ingredient){
         this.getIngredients().add(ingredient);
+    }
+
+
+    public static String getDRAFT() {
+        return DRAFT;
+    }
+
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -55,10 +55,11 @@
             <ImageView
                 android:id="@+id/EditImageView"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="300dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
-                app:srcCompat="@drawable/no_image" />
+                app:srcCompat="@drawable/no_image"
+                android:onClick="updateRecipeImage"/>
 
             <LinearLayout
                 android:id="@+id/EditIngredientList"

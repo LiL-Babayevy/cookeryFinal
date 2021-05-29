@@ -38,4 +38,9 @@
     <string name="enter_password">Введите пароль:</string>
     <string name="log_out">\uf2f5</string>
     <string name="search">поиск</string>
+    <string name="breakfast">Завтраки</string>
+    <string name="lunch">Обеды</string>
+    <string name="dinner">Ужины</string>
+    <string name="dessert">Десерты</string>
+    <string name="category">Категория:</string>
 </resources>

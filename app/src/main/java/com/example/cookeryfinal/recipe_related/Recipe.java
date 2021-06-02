@@ -90,7 +90,6 @@ public class Recipe {
         this.getIngredients().add(ingredient);
     }
 
-
     public static String getDRAFT() {
         return DRAFT;
     }

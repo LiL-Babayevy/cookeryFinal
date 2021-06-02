@@ -34,4 +34,10 @@
         android:name="com.example.cookeryfinal.ui.ShoppingListFragment"
         android:label="@string/title_shopping_list"
         tools:layout="@layout/fragment_shop_list"/>
+
+    <fragment
+        android:id="@+id/nav_liked_recipes"
+        android:name="com.example.cookeryfinal.ui.ShoppingListFragment"
+        android:label="@string/liked_recipes"
+        tools:layout="@layout/fragment_liked_recipes"/>
 </navigation>

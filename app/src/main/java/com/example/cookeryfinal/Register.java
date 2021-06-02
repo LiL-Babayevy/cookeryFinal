@@ -19,14 +19,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
+
 public class Register extends AppCompatActivity {
 
     private EditText email, name, password1, password2;
-//    private FirebaseAuth mAuth;
-//    FirebaseDatabase db;
-//    DatabaseReference users;
     private UserDataProvider userDataProvider;
-    private UserAuth userAuth;
+    private UserAuth userAuth_sr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +33,8 @@ public class Register extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         userDataProvider = UserDataProvider.getInstance();
-        userAuth = UserAuth.getInstance();
-//        mAuth = FirebaseAuth.getInstance();
-//        db = FirebaseDatabase.getInstance();
-//        users = db.getReference().child("Users");
 
+        userAuth_sr = new UserAuth(this);
         email = findViewById(R.id.email_signIn);
         name = findViewById(R.id.name_signIn);
         password1 = findViewById(R.id.password_signIn);
@@ -47,47 +43,59 @@ public class Register extends AppCompatActivity {
 
 
     public void btnRegister_clicked(View v){
-        User user = new User();
-        user.setEmail(email.getText().toString());
-        user.setName(name.getText().toString());
+        String user_email = email.getText().toString();
+        String user_name = name.getText().toString();
+        String user_password1 = password1.getText().toString();
+        String user_password2 = password2.getText().toString();
 
-        userAuth.getmAuth().createUserWithEmailAndPassword(email.getText().toString(), password1.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-//                            FirebaseUser userAuth = userAuth.getmAuth().getCurrentUser();
-                            FirebaseUser user_firebase = userAuth.getmAuth().getCurrentUser();
-                            updateUI(user_firebase);
-                            if(userAuth != null){
-                                user.setAuth_key(userAuth.getmAuth().getUid());
-                            }
-
-                            DatabaseReference push = userDataProvider.getUsers().push();
-                            user.setDatabase_key(push.getKey());
-                            push.setValue(user);
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-                    }
-                });
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = userAuth.getmAuth().getCurrentUser();
-        if(currentUser != null){
-            reload();
+        if(user_email.equals("") || user_email == null){
+            email.setError("Введите электронный адрес");
         }
+        if(user_name.equals("") || user_name == null){
+            name.setError("Введите имя");
+        }
+        if(user_password1.equals("") || user_password1 == null){
+            password1.setError("Введите пароль");
+        }
+        if(user_password2.equals("") || user_password2 == null){
+            password2.setError("Введите пароль повторно");
+        }
+        if(user_password1.length() < 6){
+            password1.setError("Недостаточчное количество символов");
+        }
+        if(!user_password1.equals(user_password2)){
+            password2.setError("Пароль введен неверно");
+        }
+
+
+        if((!user_email.equals("") || user_email != null) && (!user_name.equals("") || user_name != null)
+                && (!user_password1.equals("") || user_password1 != null) && (user_password2.equals("") || user_password2 != null)
+                && user_password1.equals(user_password2) && user_password1.length() >= 6) {
+            User user = new User();
+            user.setEmail(email.getText().toString());
+            user.setName(name.getText().toString());
+            user.setLiked(new ArrayList<>());
+            user.setShoppingList(new ArrayList<>());
+            user.setUser_password(user_password1);
+            DatabaseReference push = userDataProvider.getUsers().push();
+            user.setDatabase_key(push.getKey());
+            push.setValue(user);
+            Intent intent = new Intent(getApplicationContext(), ChooseUserIcon.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+            userAuth_sr.signIn(user);
+        }
+
     }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        FirebaseUser currentUser = userAuth.getmAuth().getCurrentUser();
+//        if(currentUser != null){
+//            reload();
+//        }
+//    }
 
     private void reload() { }
 

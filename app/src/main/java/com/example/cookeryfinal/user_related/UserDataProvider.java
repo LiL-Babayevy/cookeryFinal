@@ -14,18 +14,15 @@ import java.util.ArrayList;
 
 public class UserDataProvider{
 
-    private UserAuth userAuth = UserAuth.getInstance();
+//    private UserAuth userAuth = UserAuth.getInstance();
     private FirebaseDatabase db;
     private DatabaseReference users;
-
-
 
     private UserDataProvider() {
         db = FirebaseDatabase.getInstance();
         users = db.getReference().child("Users");
 
     }
-
 
 
     private static UserDataProvider provider = new UserDataProvider();
@@ -40,7 +37,7 @@ public class UserDataProvider{
 
 
     public User getUser(String key, OnSingleUserRetrievedListener listener) {
-        Query query = users.orderByChild("auth_key").equalTo(key);
+        Query query = users.orderByChild("database_key").equalTo(key);
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -89,26 +86,13 @@ public class UserDataProvider{
 
 
 
-    public String getAuthUserKey(){
-        String userKey = userAuth.getmAuth().getCurrentUser().getUid();
-        return userKey;
-    }
-
-    public void setUserDatabaseKey(Recipe recipe){
-        getUser(getAuthUserKey(), new OnSingleUserRetrievedListener() {
-            @Override
-            public void OnSingleUserRetrieved(User user) {
-                recipe.setOwnerID(user.getDatabase_key());
-            }
-        });
-    }
 
     public void updateUser(User u) {
         users.child(u.getDatabase_key()).setValue(u);
     }
 
     public void deleteUser(User u) {
-        users.child(u.getAuth_key()).removeValue();
+        users.child(u.getDatabase_key()).removeValue();
     }
 
     public void deleteAll(){

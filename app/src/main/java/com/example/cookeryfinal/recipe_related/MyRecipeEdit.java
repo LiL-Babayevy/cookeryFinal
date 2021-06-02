@@ -23,15 +23,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.cookeryfinal.MainActivity;
 import com.example.cookeryfinal.R;
-import com.example.cookeryfinal.recipe_related.Ingredient;
-import com.example.cookeryfinal.recipe_related.OnSingleRecipeRetrievedListener;
-import com.example.cookeryfinal.recipe_related.Recipe;
-import com.example.cookeryfinal.recipe_related.RecipeDataProvider;
-import com.example.cookeryfinal.recipe_related.RecipePage;
-import com.example.cookeryfinal.ui.MyRecipesFragment;
-import com.example.cookeryfinal.user_related.User;
+import com.example.cookeryfinal.user_related.UserAuth;
 import com.example.cookeryfinal.user_related.UserDataProvider;
 
 import java.io.InputStream;
@@ -39,15 +32,16 @@ import java.util.ArrayList;
 
 public class MyRecipeEdit extends AppCompatActivity {
 
-    private Button saveChanges;
+    private TextView postChanges;
     private EditText editName;
     private EditText editCookingSteps;
     private ImageView recipe_image;
     private RecipeDataProvider recipeDataProvider;
-    private UserDataProvider userDataProvider;
-    private String recipe_key, updated_name, updated_cookingSteps, current_image, updated_image;
+    private String recipe_key, updated_name, updated_cookingSteps;
     private Spinner category_spinner;
     private LinearLayout ingredientList;
+    private Recipe recipe = new Recipe();
+    private UserAuth userAuth;
 
     private String[] categories = {"завтрак", "обед", "ужин", "десерт"};
     private TextView plus;
@@ -55,18 +49,19 @@ public class MyRecipeEdit extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_recipe_edit);
+        setContentView(R.layout.activity_add_recipe);
         Intent intent = getIntent();
         recipe_key = intent.getStringExtra("recipe_key");
         recipeDataProvider = RecipeDataProvider.getInstance();
-        editCookingSteps = findViewById(R.id.editCookingSteps);
-        editName = findViewById(R.id.editRecipeName);
-        userDataProvider = UserDataProvider.getInstance();
-        ingredientList = findViewById(R.id.EditIngredientList);
-        saveChanges = findViewById(R.id.SaveChanges);
-        recipe_image = findViewById(R.id.EditImageView);
+        editCookingSteps = findViewById(R.id.addCookingSteps);
+        editName = findViewById(R.id.addRecipeName);
+        ingredientList = findViewById(R.id.addPageIngredientList);
+        postChanges = findViewById(R.id.addRecipePostBtn);
+        recipe_image = findViewById(R.id.imageView);
+        userAuth = new UserAuth(this);
 
-        plus = findViewById(R.id.PlusIngredient);
+
+        plus = findViewById(R.id.PlusTextView);
         plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,12 +69,26 @@ public class MyRecipeEdit extends AppCompatActivity {
             }
         });
 
-        category_spinner = findViewById(R.id.editCategorySpinner);
+        category_spinner = findViewById(R.id.CategorySpinner);
+        category_spinner.setPrompt(recipe.getRecipe_Category());
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
         // Определяем разметку для использования при выборе элемента
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Применяем адаптер к элементу spinner
         category_spinner.setAdapter(adapter);
+
+
+        category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String category = (String)parent.getItemAtPosition(position);
+                recipe.setRecipe_Category(category);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         recipeDataProvider.getCurrentRecipe(recipe_key, new OnSingleRecipeRetrievedListener() {
             @Override
@@ -87,6 +96,7 @@ public class MyRecipeEdit extends AppCompatActivity {
                 try {
                     editName.setText(retrieved_recipe.getRecipe_name());
                     editCookingSteps.setText(retrieved_recipe.getCooking_steps());
+                    ingredientList.removeAllViews();
                     for(Ingredient ingredient: retrieved_recipe.getIngredients()){
                         showIngredient(ingredient);
                     }
@@ -97,7 +107,7 @@ public class MyRecipeEdit extends AppCompatActivity {
                     }
 
                 }catch (NullPointerException e){
-                    Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "failed My REcipe Edit", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -127,84 +137,73 @@ public class MyRecipeEdit extends AppCompatActivity {
         ingredientList.addView(view);
     }
 
-    public void btnSaveChangesClicked(View v){
+    public void btnPostClicked(View v){
         ArrayList<Ingredient> ingredients = new ArrayList<>();
         int size = ingredientList.getChildCount();
-        recipeDataProvider.getCurrentRecipe(recipe_key, new OnSingleRecipeRetrievedListener() {
-            @Override
-            public void onSingleRecipeRetrieved(Recipe retrieved_recipe) {
-//                updated_name = editName.getText().toString();
-//                updated_cookingSteps = editCookingSteps.getText().toString();
-                for(int i = 0; i < size; i++){
-                    View frameIngredient = ingredientList.getChildAt(i);
-                    EditText ingTitle = frameIngredient.findViewById(R.id.editIngredientName);
-                    String ingTitleStr = ingTitle.getText().toString();
 
-                    EditText ingAmount = frameIngredient.findViewById(R.id.editIngredientAmount);
-                    String ingAmountStr = ingAmount.getText().toString();
+        updated_name = editName.getText().toString();
+        updated_cookingSteps = editCookingSteps.getText().toString();
+        recipe.setRecipe_name(updated_name);
+        recipe.setCooking_steps(updated_cookingSteps);
+        recipe.setRecipeId(recipe_key);
+        recipe.setOwnerID(userAuth.getSignedInUserKey());
+        recipe.setStatus("my_recipes");
+        recipe.setImage(recipe.getImage());
 
-                    if(!ingAmountStr.isEmpty() && !ingTitleStr.isEmpty()){
-                        Ingredient ingredient = new Ingredient(ingTitleStr, ingAmountStr);
-//                        if(!retrieved_recipe.getIngredients().isEmpty()) {
-//                            for (Ingredient ingredient1 : retrieved_recipe.getIngredients()) {
-//                                if(!ingredient1.getIngredient_name().equals(ingredient.getIngredient_name())
-//                                        && !ingredient1.getAmount().equals(ingredient.getAmount())) {
-////                                    retrieved_recipe.addIngredientToList(ingredient);
-//                                    break;
-//                                }
-//                            }
-//                        }else{
-//                            retrieved_recipe.addIngredientToList(ingredient);
-//                        }
-                        ingredients.add(ingredient);
+        for(int i = 0; i < size; i++){
+            View frameIngredient = ingredientList.getChildAt(i);
+            EditText ingTitle = frameIngredient.findViewById(R.id.editIngredientName);
+            String ingTitleStr = ingTitle.getText().toString();
 
-                    }
-                    else{
-                        checkIsEmpty(ingTitleStr, ingTitle);
-                        checkIsEmpty(ingAmountStr, ingAmount);
-                        break;
-                    }
-                }
-//                category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//                    @Override
-//                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                        String category = (String)parent.getItemAtPosition(position);
-//                        retrieved_recipe.setRecipe_Category(category);
-//                    }
-//                    @Override
-//                    public void onNothingSelected(AdapterView<?> parent) {
-//
-//                    }
-//                });
-
-//                if(!updated_name.isEmpty() && !updated_cookingSteps.isEmpty()){
-//                    retrieved_recipe.setRecipe_name(updated_name);
-//                    retrieved_recipe.setCooking_steps(updated_cookingSteps);
-
-//                }
-                retrieved_recipe.setIngredients(ingredients);
-                recipeDataProvider.updateRecipe(retrieved_recipe);
-//                Recipe recipe = new Recipe();
-//                recipe.setOwnerID(retrieved_recipe.getOwnerID());
-//                recipe.setIngredients(ingredients);
-//                recipe.setRecipe_name(retrieved_recipe.getRecipe_name());
-//                recipe.setCooking_steps(retrieved_recipe.getCooking_steps());
-//                recipe.setRecipe_Category(retrieved_recipe.getRecipe_Category());
-//                recipe.setImage(retrieved_recipe.getImage());
-//                recipe.setStatus("my_recipes");
-//                recipeDataProvider.deleteRecipe(retrieved_recipe);
-//                recipeDataProvider.pushRecipe(recipe);
-                System.out.println(ingredients.size());
+            EditText ingAmount = frameIngredient.findViewById(R.id.editIngredientAmount);
+            String ingAmountStr = ingAmount.getText().toString();
+            if(!ingAmountStr.isEmpty() && !ingTitleStr.isEmpty()){
+                Ingredient ingredient = new Ingredient(ingTitleStr, ingAmountStr);
+                ingredients.add(ingredient);
             }
-
-        });
+            else{
+                checkIsEmpty(ingTitleStr, ingTitle);
+                checkIsEmpty(ingAmountStr, ingAmount);
+                break;
+            }
+        }
+        recipe.setIngredients(ingredients);
+        recipeDataProvider.updateRecipe(recipe);
         MyRecipeEdit.this.finish();
     }
 
-    public void updateRecipeImage(View v){
+    public void btnSaveClicked(View v){
+        recipe.setCooking_steps(editCookingSteps.getText().toString());
+        EditText recipeName = findViewById(R.id.addRecipeName);
+        String recipeNameStr = recipeName.getText().toString();
+        recipe.setRecipe_name(recipeNameStr);
+        recipe.setRecipeId(recipe_key);
+        recipe.setIngredients(new ArrayList<>());
+        recipe.setStatus("draft");
+        recipe.setImage(recipe.getImage());
+        recipe.getIngredients().clear();
+        for(int i = 0; i < ingredientList.getChildCount(); i++){
+            View frameIngredient = ingredientList.getChildAt(i);
+            EditText ingTitle = frameIngredient.findViewById(R.id.editIngredientName);
+            String ingTitleStr = ingTitle.getText().toString();
+
+            EditText ingAmount = frameIngredient.findViewById(R.id.editIngredientAmount);
+            String ingAmountStr = ingAmount.getText().toString();
+
+            if(!ingAmountStr.isEmpty() && !ingTitleStr.isEmpty()){
+                Ingredient ingredient = new Ingredient(ingTitleStr, ingAmountStr);
+                recipe.getIngredients().add(ingredient);
+            }
+        }
+        recipe.setOwnerID(userAuth.getSignedInUser().getDatabase_key());
+        recipeDataProvider.updateRecipe(recipe);
+        MyRecipeEdit.this.finish();
+    }
+
+    public void setImage(View v){
         String[] options = new String[]{"Сделать фото", "Загрузить из галереи"};
         AlertDialog.Builder image_set_dialog = new AlertDialog.Builder(this);
-        image_set_dialog.setTitle("set photo");
+        image_set_dialog.setTitle("Изменить фото");
         image_set_dialog.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -227,26 +226,20 @@ public class MyRecipeEdit extends AppCompatActivity {
         if(resultCode == RESULT_OK && data != null){
             if(requestCode == 0){
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                recipeDataProvider.getCurrentRecipe(recipe_key, new OnSingleRecipeRetrievedListener() {
-                    @Override
-                    public void onSingleRecipeRetrieved(Recipe retrieved_recipe) {
-                        recipeDataProvider.saveImageToFB(bitmap, retrieved_recipe);
-                    }
-                });
+                recipeDataProvider.saveImageToFB(bitmap, recipe);
                 recipe_image.setImageBitmap(bitmap);
             } else if(requestCode == 1){
                 try {
                     InputStream is = getContentResolver().openInputStream(data.getData());
                     Bitmap bitmap = BitmapFactory.decodeStream(is);
-                    recipeDataProvider.getCurrentRecipe(recipe_key, new OnSingleRecipeRetrievedListener() {
-                        @Override
-                        public void onSingleRecipeRetrieved(Recipe retrieved_recipe) {
-                            recipeDataProvider.saveImageToFB(bitmap, retrieved_recipe);
-                        }
-                    });
+                    recipeDataProvider.saveImageToFB(bitmap, recipe);
                     recipe_image.setImageBitmap(bitmap);
                 }catch (Exception e){}
             }
         }
+    }
+
+    public void removeIngredientClicked(View v){
+
     }
 }

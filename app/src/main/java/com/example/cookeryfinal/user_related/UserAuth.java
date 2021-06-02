@@ -1,29 +1,43 @@
 package com.example.cookeryfinal.user_related;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class UserAuth {
 
-    private FirebaseAuth mAuth;
+    private Context context;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
+    private static User current_user;
 
-    private UserAuth(){
-        mAuth = FirebaseAuth.getInstance();
-    }
-    private static UserAuth userAuth = new UserAuth();
-    public static UserAuth getInstance(){
-        return userAuth;
-    }
-
-    public FirebaseUser getCurrentUser(){
-        return mAuth.getCurrentUser();
+    public UserAuth(Context context) {
+        this.context = context;
+        sp = context.getSharedPreferences("signedInUserKey", Context.MODE_PRIVATE);
+        editor = sp.edit();
     }
 
-    public void singOut(){
-        mAuth.signOut();
+    public void signIn(User u) {
+        editor.putString("signedInUserKey", u.getDatabase_key());
+        editor.commit();
+        current_user = u;
     }
 
-    public FirebaseAuth getmAuth(){
-        return this.mAuth;
+    public void signOut() {
+        editor.putString("signedInUserKey", null);
+        editor.commit();
+        current_user = null;
     }
+
+    public User getSignedInUser() {
+        return current_user;
+    }
+
+    public String getSignedInUserKey() {
+        String key = sp.getString("signedInUserKey", null);
+        return key;
+    }
+
 }

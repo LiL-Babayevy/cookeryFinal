@@ -9,6 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:text="Вы уверены, что хотите удалить данный рецепт?"/>
+        android:text="Удалить данный рецепт из раздела 'Понравившиеся'?"/>
 
 </LinearLayout>

@@ -1,9 +1,10 @@
-package com.example.cookeryfinal.recipe_related;
+  package com.example.cookeryfinal.recipe_related;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.cookeryfinal.R;
 import com.example.cookeryfinal.ui.MyRecipesFragment;
 import com.example.cookeryfinal.user_related.User;
+import com.example.cookeryfinal.user_related.UserAuth;
 import com.example.cookeryfinal.user_related.UserDataProvider;
 
 import java.io.InputStream;
@@ -43,7 +45,8 @@ public class AddRecipe extends AppCompatActivity {
     private String[] categories = {"завтрак", "обед", "ужин", "десерт"};
     private Recipe recipe = new Recipe();
     private RecipeDataProvider recipeDataProvider;
-    private ArrayList<Button> listOfButt = new ArrayList<>();
+    private UserAuth userAuth;
+    private User current_user;
 
 
     @Override
@@ -52,10 +55,13 @@ public class AddRecipe extends AppCompatActivity {
         setTitle("Добавление рецепта");
         setContentView(R.layout.activity_add_recipe);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.darker_pink)));
         set_image = findViewById(R.id.imageView);
 
         recipeDataProvider = RecipeDataProvider.getInstance();
+
+        userAuth = new UserAuth(this);
+        current_user = userAuth.getSignedInUser();
 
         ingredients = findViewById(R.id.addPageIngredientList);
         ingredients.addView(addIngredient());
@@ -91,17 +97,16 @@ public class AddRecipe extends AppCompatActivity {
             }
         });
 
-
-        for(int i = 0; i < ingredients.getChildCount(); i++){
-            View frameIngredient = ingredients.getChildAt(i);
-            Button b = frameIngredient.findViewById(R.id.DeleteIngredient);
-            b.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ingredients.removeView(frameIngredient);
-                }
-            });
-        }
+//        for(int i = 0; i < ingredients.getChildCount(); i++){
+//            View frameIngredient = ingredients.getChildAt(i);
+//            Button b = frameIngredient.findViewById(R.id.DeleteIngredient);
+//            b.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ingredients.removeView(frameIngredient);
+//                }
+//            });
+//        }
     }
 
     @Override
@@ -150,17 +155,9 @@ public class AddRecipe extends AppCompatActivity {
                 recipe.getIngredients().add(ingredient);
             }
         }
-        recipe.setOwnerID(userDataProvider.getAuthUserKey());
-        getCategoryFromSpinner();
+        recipe.setOwnerID(current_user.getDatabase_key());
         recipeDataProvider.pushRecipe(recipe);
-////        currentUser.getDrafts().add(recipe);
-//        userDataProvider.getUser(userDataProvider.getAuthUserKey(), new OnSingleUserRetrievedListener() {
-//            @Override
-//            public void OnSingleUserRetrieved(User user) {
-//                user.getDrafts().add(recipe);
-//            }
-//        });
-//        userDataProvider.updateUser(currentUser);
+        AddRecipe.this.finish();
     }
 
     public void btnPostClicked(View view){
@@ -189,26 +186,18 @@ public class AddRecipe extends AppCompatActivity {
         String cookStepsStr = cooking_steps.getText().toString();
         checkIsEmpty(cookStepsStr, cooking_steps);
 
-        getCategoryFromSpinner();
-
         if(!recipeNameStr.isEmpty() && !cookStepsStr.isEmpty()){
             recipe.setRecipe_name(recipeNameStr);
             recipe.setCooking_steps(cookStepsStr);
             recipe.setIngredients(ingredient_list);
-            recipe.setOwnerID(userDataProvider.getAuthUserKey());
+            recipe.setOwnerID(current_user.getDatabase_key());
             recipe.setStatus("my_recipes");
 
             recipeDataProvider.pushRecipe(recipe);
             AddRecipe.this.finish();
-
         }else{
             Toast.makeText(this, "Все поля должны быть заполнены", Toast.LENGTH_LONG).show();
         }
-
-    }
-
-    public void getCategoryFromSpinner(){
-
     }
 
 
@@ -222,7 +211,7 @@ public class AddRecipe extends AppCompatActivity {
     public void setImage(View v){
         String[] options = new String[]{"Сделать фото", "Загрузить из галереи"};
         AlertDialog.Builder image_set_dialog = new AlertDialog.Builder(this);
-        image_set_dialog.setTitle("set photo");
+        image_set_dialog.setTitle("Добавление фото");
         image_set_dialog.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -259,4 +248,7 @@ public class AddRecipe extends AppCompatActivity {
             }
         }
     }
+
+
+
 }

@@ -14,11 +14,11 @@
 
 
     <string name="title_user_page">личная страница</string>
-    <string name="title_main_page">главная</string>
-    <string name="title_shopping_list">лист покупок</string>
-    <string name="my_recipes">мои рецепты</string>
-    <string name="liked_recipes">понравившиеся</string>
-    <string name="drafts">черновики</string>
+    <string name="title_main_page">Главная</string>
+    <string name="title_shopping_list">Лист покупок</string>
+    <string name="my_recipes">Мои рецепты</string>
+    <string name="liked_recipes">Понравившиеся</string>
+    <string name="drafts">Черновики</string>
     <string name="registration">Регистрация</string>
     <string name="ingredients">Ингредиенты:</string>
     <string name="cookingsteps">Приготовление:</string>
@@ -43,4 +43,6 @@
     <string name="dinner">Ужины</string>
     <string name="dessert">Десерты</string>
     <string name="category">Категория:</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

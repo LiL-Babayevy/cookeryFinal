@@ -1,13 +1,17 @@
 package com.example.cookeryfinal;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cookeryfinal.ui.LikedRecipesFragment;
 import com.example.cookeryfinal.ui.MyRecipesFragment;
 import com.example.cookeryfinal.ui.HomeFragment;
 import com.example.cookeryfinal.ui.DraftsFragment;
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private TextView logOut;
     private UserAuth userAuth;
+    private UserDataProvider userDataProvider;
 
 
     @Override
@@ -44,7 +49,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        userAuth = UserAuth.getInstance();
+        userAuth = new UserAuth(this);
+        userDataProvider = UserDataProvider.getInstance();
+        User current_user = userAuth.getSignedInUser();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer,
@@ -52,86 +59,61 @@ public class MainActivity extends AppCompatActivity {
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-
-
         View headerView = navigationView.getHeaderView(0);
-        TextView navUsername = headerView.findViewById(R.id.textView);
+        TextView navUsername = headerView.findViewById(R.id.nav_name);
+        TextView navUserEmail = headerView.findViewById(R.id.nav_email);
+        ImageView nav_image = headerView.findViewById(R.id.userPhotoHeader);
 
-        if(userAuth.getCurrentUser() != null){
-            UserDataProvider userDataProvider = UserDataProvider.getInstance();
-            userDataProvider.getUser(userAuth.getCurrentUser().getUid(), new OnSingleUserRetrievedListener() {
-                @Override
-                public void OnSingleUserRetrieved(User user) {
-                    try{
-                        navUsername.setText(user.getName());
-                    }catch (NullPointerException e){
-                        Toast.makeText(getApplicationContext(), "USER = NULL" , Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
+        if(current_user != null){
+            navUsername.setText(current_user.getName());
+            navUserEmail.setText(current_user.getEmail());
+            nav_image.setImageResource(current_user.getImage());
         }
 
 
 
-
-        FirebaseUser user = userAuth.getCurrentUser();
+//      Выход из аккаунта
         logOut = headerView.findViewById(R.id.LogOut);
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userAuth.singOut();
-                try{
-                    userAuth.getCurrentUser().getEmail();
-                }catch (NullPointerException e){
-                    Intent intent = new Intent(getApplicationContext(), LogIn.class);
-                    startActivity(intent);
-                    MainActivity.this.finish();
-                }
+                userDataProvider.updateUser(userAuth.getSignedInUser());
+                userAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), LogIn.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
+                MainActivity.this.finish();
             }
         });
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, new HomeFragment()).commit();
+        setTitle("Главная");
 
 
-//        mSlideTextView.setTextColor(getResources().getColor(R.color.purple_200));
 
-//        Switch mGallerySwitch = (Switch) MenuItemCompat
-//                .getActionView(navigationView.getMenu().findItem(R.id.nav_gallery));
-//        mGallerySwitch.setGravity(Gravity.CENTER);
-//        mGallerySwitch.setChecked(true);
-//        mGallerySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                Toast.makeText(getApplicationContext(), isChecked + "", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
+        navigationView.setCheckedItem(R.id.nav_home);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment f = null;
                 if (item.getItemId() == R.id.nav_home) {
-                    setTitle(null);
                     f = new HomeFragment();
                 } else if (item.getItemId() == R.id.nav_my_recipes) {
-                    setTitle(item.getTitle());
                     f = new MyRecipesFragment();
                 } else if (item.getItemId() == R.id.nav_slideshow) {
-                    setTitle(item.getTitle());
                     f = new DraftsFragment();
                 } else if (item.getItemId() == R.id.nav_settings) {
-//                    toolbar.setBackgroundResource(R.color.white_blue);
-                    setTitle(item.getTitle());
                     f = new SettingsFragment();
                 } else if (item.getItemId() == R.id.nav_shop_list){
-                    setTitle(item.getTitle());
                     f = new ShoppingListFragment();
+                } else if (item.getItemId() == R.id.nav_liked_recipes){
+                    f = new LikedRecipesFragment();
                 }
+                setTitle(item.getTitle());
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, f).commit();
                 drawer.close();
@@ -149,4 +131,29 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        new AlertDialog.Builder(this).setMessage("Вы уверены, что хотите выйти из приложения?")
+                .setPositiveButton("да", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        userDataProvider.updateUser(userAuth.getSignedInUser());
+                        moveTaskToBack(true);
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        System.exit(1);
+                    }
+                })
+                .setNeutralButton("нет", null)
+                .show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(userAuth.getSignedInUser() != null){
+            userDataProvider.updateUser(userAuth.getSignedInUser());
+        }
+    }
 }

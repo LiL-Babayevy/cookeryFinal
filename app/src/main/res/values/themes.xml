@@ -54,4 +54,11 @@
     <style name="IconColor">
         <item name="android:drawable">@color/darker_pink</item>
     </style>
+
+    <style name="Icon">
+        <item name="android:drawable">@drawable/chefhat</item>
+
+    </style>
+
+
 </resources>

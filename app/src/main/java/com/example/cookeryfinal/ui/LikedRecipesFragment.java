@@ -5,10 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +13,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.cookeryfinal.GridSpacingItemDecoration;
 import com.example.cookeryfinal.LogIn;
-import com.example.cookeryfinal.recipe_related.MyRecipeEdit;
 import com.example.cookeryfinal.R;
 import com.example.cookeryfinal.Register;
 import com.example.cookeryfinal.recipe_related.AddRecipe;
@@ -28,31 +30,43 @@ import com.example.cookeryfinal.recipe_related.Recipe;
 import com.example.cookeryfinal.recipe_related.RecipeDataProvider;
 import com.example.cookeryfinal.recipe_related.RecipePage;
 import com.example.cookeryfinal.recipe_related.SquareRecipeAdapter;
+import com.example.cookeryfinal.user_related.OnSingleUserRetrievedListener;
 import com.example.cookeryfinal.user_related.User;
 import com.example.cookeryfinal.user_related.UserAuth;
 import com.example.cookeryfinal.user_related.UserDataProvider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.zip.Inflater;
 
-public class MyRecipesFragment extends Fragment implements SquareRecipeAdapter.OnRecipeListener {
-
-    public MyRecipesFragment(){}
+public class LikedRecipesFragment extends Fragment implements SquareRecipeAdapter.OnRecipeListener {
 
     private View root;
     private SquareRecipeAdapter sqr_recipe_adapter;
-    private ArrayList<Recipe> recipeArrayList;
+    private ArrayList<Recipe> liked_recipes;
     private GridLayoutManager mLayoutManager;
     private RecyclerView recyclerView;
     private RecipeDataProvider provider;
+    private UserDataProvider user_data_provider;
     private UserAuth userAuth;
-    private User current_user;
+    private User user;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public LikedRecipesFragment() {
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         userAuth = new UserAuth(getContext());
-        current_user = userAuth.getSignedInUser();
-        if(current_user == null){
+        user = userAuth.getSignedInUser();
+        user_data_provider = UserDataProvider.getInstance();
+        if (user == null) {
             root = inflater.inflate(R.layout.blank_fragments, container, false);
             TextView logInTxt = root.findViewById(R.id.logInText);
             logInTxt.setOnClickListener(new View.OnClickListener() {
@@ -70,47 +84,36 @@ public class MyRecipesFragment extends Fragment implements SquareRecipeAdapter.O
                     startActivity(Intent);
                 }
             });
-        }else {
-            root = inflater.inflate(R.layout.fragment_my_recipes, container, false);
-            FloatingActionButton fab = root.findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(getContext(), AddRecipe.class);
-                    startActivity(intent);
-                }
-            });
+        } else {
+            root = inflater.inflate(R.layout.fragment_liked_recipes, container, false);
 
-            recipeArrayList = new ArrayList<>();
+            liked_recipes = new ArrayList<>();
             mLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
-            sqr_recipe_adapter = new SquareRecipeAdapter(recipeArrayList, this);
+            sqr_recipe_adapter = new SquareRecipeAdapter(liked_recipes, this);
 
             OnRecipeRetrievedListener listener = new OnRecipeRetrievedListener() {
                 @Override
                 public void onRecipeRetrieved(ArrayList<Recipe> recipes) {
-                    recipeArrayList.clear();
-                    for(int i = recipes.size()-1; i>=0; i--){
-                        recipeArrayList.add(recipes.get(i));
+                    liked_recipes.clear();
+                    for(int i = recipes.size()-1; i>=0; i--) {
+                        liked_recipes.add(recipes.get(i));
                     }
                     sqr_recipe_adapter.notifyDataSetChanged();
                 }
             };
-
             provider = RecipeDataProvider.getInstance();
-            provider.getMyRecipes(current_user.getDatabase_key(), listener);
+            provider.getLikedRecipes(user.getLiked(), listener);
         }
         return root;
     }
-
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         userAuth = new UserAuth(getContext());
-        current_user = userAuth.getSignedInUser();
-        if(current_user != null) {
-            recyclerView = root.findViewById(R.id.recyclerView_myRecipes);
+        user = userAuth.getSignedInUser();
+        if(user != null) {
+            recyclerView = root.findViewById(R.id.recyclerView_likedRecipes);
             int spanCount = 2; // 3 columns
             int spacing = 40; // 50px
             boolean includeEdge = true;
@@ -128,48 +131,29 @@ public class MyRecipesFragment extends Fragment implements SquareRecipeAdapter.O
         startActivity(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onRecipeLongClick(Recipe recipe) {
-        AlertDialog.Builder recipe_dialog = new AlertDialog.Builder(getContext());
-        recipe_dialog.setTitle(recipe.getRecipe_name());
-        recipe_dialog
-                .setPositiveButton("Редактировать", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(getContext(), MyRecipeEdit.class);
-                        intent.putExtra("recipe_key", recipe.getRecipeId());
-                        startActivity(intent);
-                        }
-
-                    });
-        recipe_dialog.setNeutralButton("Удалить", new DialogInterface.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        AlertDialog.Builder liked_dialog = new AlertDialog.Builder(getContext());
+        liked_dialog.setTitle(recipe.getRecipe_name());
+        liked_dialog.setView(R.layout.dialog_delete_from_fav);
+        liked_dialog.setPositiveButton("Да", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                AlertDialog.Builder recipe_delete_dialog = new AlertDialog.Builder(getContext());
-                recipe_delete_dialog.setTitle(recipe.getRecipe_name());
-                recipe_delete_dialog.setView(R.layout.dialog_delete);
-                recipe_delete_dialog
-                        .setPositiveButton("Да", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                provider.deleteRecipe(recipe);
-//                            alertDialog.cancel();
-                            }
-
-                        });
-                recipe_delete_dialog.setNeutralButton("Нет", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                AlertDialog alertDialog2 = recipe_delete_dialog.create();
-                alertDialog2.show();
+                user_data_provider = UserDataProvider.getInstance();
+                user.getLiked().remove(recipe.getRecipeId());
+                liked_recipes.remove(recipe);
+                sqr_recipe_adapter.notifyDataSetChanged();
+                Toast.makeText(getContext(), "Рецепт удален из 'Понравившихся'!", Toast.LENGTH_LONG).show();
             }
-
         });
-        AlertDialog alertDialog = recipe_dialog.create();
+        liked_dialog.setNeutralButton("Нет", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = liked_dialog.create();
         alertDialog.show();
     }
 }

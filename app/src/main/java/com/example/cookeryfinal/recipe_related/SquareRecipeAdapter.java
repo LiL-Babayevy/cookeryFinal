@@ -77,7 +77,7 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    onRecipeListener.onRecipeLongClick(getAdapterPosition());
+                    onRecipeListener.onRecipeLongClick(recipeList.get(getAdapterPosition()));
                     return false;
                 }
             });
@@ -97,7 +97,7 @@ public class SquareRecipeAdapter extends RecyclerView.Adapter<SquareRecipeAdapte
 
     public interface OnRecipeListener{
         void onRecipeClick(Recipe recipe);
-        void onRecipeLongClick(int position);
+        void onRecipeLongClick(Recipe recipe);
     }
 
     public static int getScreenWidth() {

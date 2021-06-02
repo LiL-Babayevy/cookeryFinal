@@ -4,13 +4,17 @@ package com.example.cookeryfinal.ui;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -20,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cookeryfinal.MainActivity;
 import com.example.cookeryfinal.R;
 import com.example.cookeryfinal.recipe_related.OnRecipeRetrievedListener;
 import com.example.cookeryfinal.recipe_related.Recipe;
@@ -29,6 +34,8 @@ import com.example.cookeryfinal.recipe_related.RectangleRecipeAdapter;
 import com.example.cookeryfinal.recipe_related.SquareRecipeAdapter;
 
 import java.util.ArrayList;
+
+import static android.content.ContentValues.TAG;
 
 
 public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnRecipeListener , SquareRecipeAdapter.OnRecipeListener{
@@ -47,14 +54,17 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
     private SearchView searchView = null;
     private SearchView.OnQueryTextListener queryTextListener;
     private RecipeDataProvider provider;
-    private  OnRecipeRetrievedListener listener;
+    private OnRecipeRetrievedListener listener;
     private TextView breakfast_txt, lunch_txt, dinner_txt, dessert_txt;
+
+    private DownloadData downloadData = null;
 
     public HomeFragment(){
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         root = inflater.inflate(R.layout.fragment_home, container, false);
         recipeArrayList = new ArrayList<>();
 
@@ -72,10 +82,14 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
         provider = RecipeDataProvider.getInstance();
 
 
-        setHorizontalRecyclerView(mRecyclerView_breakfast, "завтрак");
-        setHorizontalRecyclerView(mRecyclerView_lunch, "обед");
-        setHorizontalRecyclerView(mRecyclerView_dinner, "ужин");
-        setHorizontalRecyclerView(mRecyclerView_dessert, "десерт");
+//
+//        setHorizontalRecyclerView(mRecyclerView_breakfast, "завтрак");
+//        setHorizontalRecyclerView(mRecyclerView_lunch, "обед");
+//        setHorizontalRecyclerView(mRecyclerView_dinner, "ужин");
+//        setHorizontalRecyclerView(mRecyclerView_dessert, "десерт");
+
+        downloadData = new DownloadData();
+        downloadData.execute();
 
         return root;
     }
@@ -238,7 +252,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
     }
 
     @Override
-    public void onRecipeLongClick(int position) {
+    public void onRecipeLongClick(Recipe recipe) {
     }
 
     @Override
@@ -246,6 +260,39 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
         Recipe recipe = recipeArrayList.get(position);
         Intent intent = new Intent(getContext(), RecipePage.class);
         intent.putExtra("clicked_recipe", recipe.getRecipeId());
+
         startActivity(intent);
+    }
+
+    private class DownloadData extends AsyncTask<Void, Void, Void>{
+
+        private ProgressBar progressBar = (ProgressBar)root.findViewById(R.id.progress_bar_home);
+        LinearLayout linearLayout = (LinearLayout)root.findViewById(R.id.homePageLinear);
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            linearLayout.setVisibility(View.GONE);
+            Log.d(TAG, "on preexecute");
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            setHorizontalRecyclerView(mRecyclerView_breakfast, "завтрак");
+            setHorizontalRecyclerView(mRecyclerView_lunch, "обед");
+            setHorizontalRecyclerView(mRecyclerView_dinner, "ужин");
+            setHorizontalRecyclerView(mRecyclerView_dessert, "десерт");
+            Log.d(TAG, "do in back");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressBar.setVisibility(View.GONE);
+            linearLayout.setVisibility(View.VISIBLE);
+            Log.d(TAG, "on postexecute");
+        }
     }
 }

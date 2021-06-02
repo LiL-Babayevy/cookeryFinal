@@ -1,15 +1,15 @@
 package com.example.cookeryfinal.user_related;
 
+import com.example.cookeryfinal.ShoppingItem;
 import com.example.cookeryfinal.recipe_related.Recipe;
 
 import java.util.ArrayList;
 
 public class User {
-    private String name, email, auth_key, database_key;
-    private ArrayList<Recipe> my_recipes;
-    private ArrayList<Recipe> drafts;
+    private String name, email, database_key, user_password;
     private ArrayList<String> liked;
-    private ArrayList<String> shoppingList = new ArrayList<>();
+    private ArrayList<ShoppingItem> shoppingList;
+    private int image;
 
     public User(){
     }
@@ -17,10 +17,6 @@ public class User {
     public User(String name, String email){
         this.name = name;
         this.email = email;
-        my_recipes = new ArrayList<>();
-        drafts = new ArrayList<>();
-        liked = new ArrayList<>();
-        shoppingList = new ArrayList<>();
     }
 
     public String getName() {
@@ -37,26 +33,6 @@ public class User {
         this.email = email;
     }
 
-    public String getAuth_key() {
-        return auth_key;
-    }
-    public void setAuth_key(String auth_key) {
-        this.auth_key = auth_key;
-    }
-
-    public ArrayList<Recipe> getMy_recipes() {
-        return my_recipes;
-    }
-    public void setMy_recipes(ArrayList<Recipe> my_recipes) {
-        this.my_recipes = my_recipes;
-    }
-
-    public ArrayList<Recipe> getDrafts() {
-        return drafts;
-    }
-    public void setDrafts(ArrayList<Recipe> drafts) {
-        this.drafts = drafts;
-    }
 
     public void setLiked(ArrayList<String> liked) {
         this.liked = liked;
@@ -72,10 +48,24 @@ public class User {
         this.database_key = database_key;
     }
 
-    public ArrayList<String> getShoppingList() {
+    public ArrayList<ShoppingItem> getShoppingList() {
         return shoppingList;
     }
-    public void setShoppingList(ArrayList<String> shoppingList) {
+    public void setShoppingList(ArrayList<ShoppingItem> shoppingList) {
         this.shoppingList = shoppingList;
+    }
+
+    public int getImage() {
+        return image;
+    }
+    public void setImage(int image) {
+        this.image = image;
+    }
+
+    public String getUser_password() {
+        return user_password;
+    }
+    public void setUser_password(String user_password) {
+        this.user_password = user_password;
     }
 }

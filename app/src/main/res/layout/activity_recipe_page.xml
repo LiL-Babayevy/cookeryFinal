@@ -5,9 +5,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white_blue"
     tools:context=".recipe_related.RecipePage"
+    android:background="@color/white_blue"
     android:fadingEdgeLength="0dp">
+
     <ScrollView
 
         android:layout_margin="15dp"
@@ -42,16 +43,14 @@
                     app:layout_constraintVertical_bias="1.0"
                     android:layout_weight="7"/>
 
-                <TextView
+                <ImageView
                     android:id="@+id/LikeIcon"
-                    style="@style/SecondTextIcon"
-                    android:layout_width="wrap_content"
+                    android:src="@drawable/ic_dislike"
                     android:layout_height="wrap_content"
-                    android:text="@string/fa_heart"
+                    android:layout_width="wrap_content"
                     android:gravity="right"
-                    android:textColor="@color/light_pink"
-                    android:textSize="28sp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:onClick="likeRecipe"/>
 
             </LinearLayout>
 
@@ -121,8 +120,6 @@
                 android:text="@string/fa_copy"
                 android:textColor="@color/light_pink"
                 android:textSize="28sp" />
-
-
 
         </LinearLayout>
     </ScrollView>

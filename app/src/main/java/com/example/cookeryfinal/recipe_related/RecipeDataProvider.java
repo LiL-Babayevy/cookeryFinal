@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.example.cookeryfinal.user_related.OnSingleUserRetrievedListener;
 import com.example.cookeryfinal.user_related.User;
+import com.example.cookeryfinal.user_related.UserAuth;
 import com.example.cookeryfinal.user_related.UserDataProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +27,7 @@ public class RecipeDataProvider {
     private RecipeDataProvider() {
         db = FirebaseDatabase.getInstance();
         recipes_dr = db.getReference().child("Recipes");
-        recipe_push = recipes_dr.push();
+
 
     }
 
@@ -41,7 +42,7 @@ public class RecipeDataProvider {
     }
 
 
-    public void getMyRecipes(OnRecipeRetrievedListener listener) {
+    public void getMyRecipes(String currentUser_databaseKey, OnRecipeRetrievedListener listener) {
         ArrayList<Recipe> recipeArrayList = new ArrayList<>();
         Query query = recipes_dr.orderByChild("status").equalTo("my_recipes");
         UserDataProvider userdata = UserDataProvider.getInstance();
@@ -53,7 +54,7 @@ public class RecipeDataProvider {
                 for (DataSnapshot dataRecipe : snapshot.getChildren()) {
                     Recipe recipe = dataRecipe.getValue(Recipe.class);
                     try {
-                        if(recipe.getOwnerID().equals(userdata.getAuthUserKey())){
+                        if(recipe.getOwnerID().equals(currentUser_databaseKey)){
                             recipeArrayList.add(recipe);
                         }
                     }catch (NullPointerException e){
@@ -69,10 +70,9 @@ public class RecipeDataProvider {
             }
         });
     }
-    public void getDraftRecipes(OnRecipeRetrievedListener listener) {
+    public void getDraftRecipes(String user_databaseKey, OnRecipeRetrievedListener listener) {
         ArrayList<Recipe> recipeArrayList = new ArrayList<>();
         Query query = recipes_dr.orderByChild("status").equalTo("draft");
-        UserDataProvider userdata = UserDataProvider.getInstance();
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -81,7 +81,7 @@ public class RecipeDataProvider {
                 for (DataSnapshot dataRecipe : snapshot.getChildren()) {
                     Recipe recipe = dataRecipe.getValue(Recipe.class);
                     try {
-                        if(recipe.getOwnerID().equals(userdata.getAuthUserKey())) {
+                        if(recipe.getOwnerID().equals(user_databaseKey)) {
                             recipeArrayList.add(recipe);
                         }
                     }catch (NullPointerException e){
@@ -158,7 +158,7 @@ public class RecipeDataProvider {
         });
     }
 
-    public Recipe getCurrentRecipe(String key, OnSingleRecipeRetrievedListener listener) {
+    public void getCurrentRecipe(String key, OnSingleRecipeRetrievedListener listener) {
         Query query = recipes_dr.orderByChild("recipeId").equalTo(key);
 
         query.addValueEventListener(new ValueEventListener() {
@@ -177,7 +177,39 @@ public class RecipeDataProvider {
 
             }
         });
-        return null;
+    }
+
+    public void getLikedRecipes(ArrayList<String> liked, OnRecipeRetrievedListener listener){
+        Query query = recipes_dr.orderByChild("recipeId");
+        ArrayList<Recipe> liked_recipes = new ArrayList<>();
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                liked_recipes.clear();
+                for (DataSnapshot dataRecipe : snapshot.getChildren()) {
+                    Recipe recipe = dataRecipe.getValue(Recipe.class);
+//                    for(String liked_recipe_id : liked){
+//                        if(recipe.getRecipeId().equals(liked_recipe_id)){
+//                            liked_recipes.add(recipe);
+//                        }
+//                    }
+                    try {
+                        if (liked.contains(recipe.getRecipeId())) {
+                            liked_recipes.add(recipe);
+                        }
+                    }catch(NullPointerException e){
+                        liked_recipes.clear();
+                    }
+                }
+                listener.onRecipeRetrieved(liked_recipes);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void updateRecipe(Recipe r) {
@@ -193,7 +225,7 @@ public class RecipeDataProvider {
     }
 
     public void pushRecipe(Recipe recipe){
-        recipe_push.setValue(recipe);
+        recipe_push = recipes_dr.push();
         String recipeId = recipe_push.getKey();
         recipe.setRecipeId(recipeId);
         recipe_push.setValue(recipe);

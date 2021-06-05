@@ -33,6 +33,7 @@
             app:srcCompat="@drawable/ic_plus"
             android:background="@color/darker_pink"
             android:layout_margin="7dp"
-            android:layout_gravity="bottom|right"/>
+            android:layout_gravity="bottom|right"
+            app:tint="@color/white"/>
     </LinearLayout>
 </ScrollView>

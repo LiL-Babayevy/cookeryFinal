@@ -11,18 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.cookeryfinal.recipe_related.RecipesByCategory;
 import com.example.cookeryfinal.ui.LikedRecipesFragment;
 import com.example.cookeryfinal.ui.MyRecipesFragment;
 import com.example.cookeryfinal.ui.HomeFragment;
 import com.example.cookeryfinal.ui.DraftsFragment;
 import com.example.cookeryfinal.ui.SettingsFragment;
 import com.example.cookeryfinal.ui.ShoppingListFragment;
-import com.example.cookeryfinal.user_related.OnSingleUserRetrievedListener;
 import com.example.cookeryfinal.user_related.User;
 import com.example.cookeryfinal.user_related.UserAuth;
 import com.example.cookeryfinal.user_related.UserDataProvider;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -70,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
             navUsername.setText(current_user.getName());
             navUserEmail.setText(current_user.getEmail());
             nav_image.setImageResource(current_user.getImage());
+        }else{
+            navUsername.setText("Гость");
+            navUserEmail.setText("");
         }
 
 
@@ -155,5 +157,28 @@ public class MainActivity extends AppCompatActivity {
         if(userAuth.getSignedInUser() != null){
             userDataProvider.updateUser(userAuth.getSignedInUser());
         }
+    }
+
+    public void breakfastClicked(View v){
+        Intent intent = new Intent(getApplicationContext(), RecipesByCategory.class);
+        intent.putExtra("category", "завтрак");
+        startActivity(intent);
+    }
+
+    public void lunchClicked(View v){
+        Intent intent = new Intent(getApplicationContext(), RecipesByCategory.class);
+        intent.putExtra("category", "обед");
+        startActivity(intent);
+    }
+
+    public void dinnerClicked(View v){
+        Intent intent = new Intent(getApplicationContext(), RecipesByCategory.class);
+        intent.putExtra("category", "ужин");
+        startActivity(intent);
+    }
+    public void dessertClicked(View v){
+        Intent intent = new Intent(getApplicationContext(), RecipesByCategory.class);
+        intent.putExtra("category", "десерт");
+        startActivity(intent);
     }
 }

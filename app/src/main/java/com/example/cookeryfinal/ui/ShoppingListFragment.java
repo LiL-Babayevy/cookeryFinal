@@ -77,72 +77,15 @@ public class ShoppingListFragment extends Fragment {
             addItem = root.findViewById(R.id.AddItemBtn);
 
             if(current_user.getShoppingList() != null) {
-
-                for (int i = 0; i<current_user.getShoppingList().size(); i++) {
+                for (int i = 0; i < current_user.getShoppingList().size(); i++) {
                     ShoppingItem item = current_user.getShoppingList().get(i);
                     shoppingList.add(item);
                     addItemToList(item);
-                        View itemFrame = itemList.getChildAt(i);
-                        Button deleteItem = itemFrame.findViewById(R.id.DeleteItem);
-                        CheckBox check = itemFrame.findViewById(R.id.itemCheck);
-                        int finalI = i;
-                        check.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                item.setIs_checked(true);
-                                current_user.setShoppingList(shoppingList);
-                            }
-                        });
-                        check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                    item.setIs_checked(true);
-                                    current_user.setShoppingList(shoppingList);
-                            }
-                        });
-                        deleteItem.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                itemList.removeView(itemFrame);
-                                shoppingList.remove(finalI);
-                                current_user.getShoppingList().remove(finalI);
-                            }
-                        });
-                    System.out.println(item.getTitle());
-                    System.out.println(item.isIs_checked());
                 }
-//                shoppingList.addAll(current_user.getShoppingList());
             }else{
                 current_user.setShoppingList(shoppingList);
             }
 
-//            for(int i = 0; i<itemList.getChildCount(); i++){
-//                View itemFrame = itemList.getChildAt(i);
-//                Button deleteItem = itemFrame.findViewById(R.id.DeleteItem);
-//                CheckBox check = itemFrame.findViewById(R.id.itemCheck);
-//                int finalI = i;
-//                check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//                    @Override
-//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                        ShoppingItem item = shoppingList.get(finalI);
-//                        System.out.println(item.getTitle());
-//                        System.out.println(item.isIs_checked());
-//                        item.setIs_checked(isChecked);
-//                        current_user.setShoppingList(shoppingList);
-//                        System.out.println(item.getTitle());
-//                        System.out.println(item.isIs_checked());
-//                    }
-//                });
-//                deleteItem.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        itemList.removeView(itemFrame);
-//                        shoppingList.remove(finalI);
-//                        current_user.getShoppingList().remove(finalI);
-//                    }
-//                });
-//
-//            }
 
             addItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -152,10 +95,9 @@ public class ShoppingListFragment extends Fragment {
                     View dialogLayout = inflater.inflate(R.layout.dialog_layout, null);
                     EditText item_nameEdit = dialogLayout.findViewById(R.id.addItemEditText);
                     addItem.setView(dialogLayout)
-                            .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                            .setPositiveButton("ДОБАВИТЬ", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getContext(),"yes", Toast.LENGTH_LONG).show();
                                     String item_name =  item_nameEdit.getText().toString();
                                     if(item_name.equals("") || item_name.isEmpty()){
                                         item_nameEdit.setError("заполните поле");
@@ -166,11 +108,10 @@ public class ShoppingListFragment extends Fragment {
                                     }
                                 }
                             })
-                            .setNeutralButton("cancel", new DialogInterface.OnClickListener() {
+                            .setNeutralButton("ПРОПУСТИТЬ", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Toast.makeText(getContext(),"cancel", Toast.LENGTH_LONG).show();
-//                        alertDialog.cancel();
+
                                 }
                             });
                     addItem.setCancelable(false);
@@ -198,9 +139,26 @@ public class ShoppingListFragment extends Fragment {
     public void addItemToList(ShoppingItem item){
         View view = LayoutInflater.from(getContext()).inflate(R.layout.shop_list_item, null);
         TextView name_textView = view.findViewById(R.id.TextViewItemName);
+        Button deleteItem = view.findViewById(R.id.DeleteItem);
         CheckBox itemCheck = view.findViewById(R.id.itemCheck);
         name_textView.setText(item.getTitle());
         itemCheck.setChecked(item.isIs_checked());
+        deleteItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemList.removeView(view);
+                shoppingList.remove(item);
+                current_user.setShoppingList(shoppingList);
+            }
+        });
+
+        itemCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                item.setIs_checked(isChecked);
+                current_user.setShoppingList(shoppingList);
+            }
+        });
         itemList.addView(view);
     }
 

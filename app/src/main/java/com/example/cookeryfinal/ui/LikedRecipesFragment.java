@@ -114,8 +114,8 @@ public class LikedRecipesFragment extends Fragment implements SquareRecipeAdapte
         user = userAuth.getSignedInUser();
         if(user != null) {
             recyclerView = root.findViewById(R.id.recyclerView_likedRecipes);
-            int spanCount = 2; // 3 columns
-            int spacing = 40; // 50px
+            int spanCount = 2;
+            int spacing = 40;
             boolean includeEdge = true;
             recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
             recyclerView.setLayoutManager(mLayoutManager);
@@ -144,7 +144,7 @@ public class LikedRecipesFragment extends Fragment implements SquareRecipeAdapte
                 user.getLiked().remove(recipe.getRecipeId());
                 liked_recipes.remove(recipe);
                 sqr_recipe_adapter.notifyDataSetChanged();
-                Toast.makeText(getContext(), "Рецепт удален из 'Понравившихся'!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "рецепт удален из 'Понравившихся'!", Toast.LENGTH_SHORT).show();
             }
         });
         liked_dialog.setNeutralButton("Нет", new DialogInterface.OnClickListener() {

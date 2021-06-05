@@ -3,6 +3,7 @@ package com.example.cookeryfinal.ui;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -81,6 +82,7 @@ public class MyRecipesFragment extends Fragment implements SquareRecipeAdapter.O
                 }
             });
 
+
             recipeArrayList = new ArrayList<>();
             mLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
             sqr_recipe_adapter = new SquareRecipeAdapter(recipeArrayList, this);
@@ -111,8 +113,8 @@ public class MyRecipesFragment extends Fragment implements SquareRecipeAdapter.O
         current_user = userAuth.getSignedInUser();
         if(current_user != null) {
             recyclerView = root.findViewById(R.id.recyclerView_myRecipes);
-            int spanCount = 2; // 3 columns
-            int spacing = 40; // 50px
+            int spanCount = 2;
+            int spacing = 40;
             boolean includeEdge = true;
             recyclerView.addItemDecoration(new GridSpacingItemDecoration(spanCount, spacing, includeEdge));
             recyclerView.setLayoutManager(mLayoutManager);

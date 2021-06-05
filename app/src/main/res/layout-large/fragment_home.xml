@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="@dimen/mtrl_toolbar_default_height"
+    android:background="@color/white_blue"
+    tools:context=".ui.HomeFragment">
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/homePageLinear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_search"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp"/>
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:background="@color/white_blue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+       <FrameLayout
+           android:id="@+id/frameBreakfast"
+           android:layout_marginLeft="15dp"
+           android:layout_marginRight="15dp"
+           android:background="@color/white"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+           <TextView
+            android:id="@+id/breakfast_text"
+               android:textSize="40sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/darker_pink"
+            android:background="@color/white"
+            android:paddingLeft="10sp"
+            android:textStyle="bold"
+            android:text="@string/breakfast"/>
+           <TextView
+               android:id="@+id/breakfastRecipesClick"
+               android:layout_gravity="center|right"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:paddingRight="10dp"
+               android:textSize="40sp"
+               android:textColor="@color/darker_pink"
+               style="@style/TextIcon"
+               android:text="@string/fa_arrow_right"
+               android:onClick="breakfastClicked"/>
+       </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_breakfast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+        <FrameLayout
+            android:id="@+id/frameLunch"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/lunch_Text"
+            android:textSize="40sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/darker_pink"
+            android:background="@color/white"
+            android:paddingLeft="10sp"
+            android:textStyle="bold"
+            android:text="@string/lunch"/>
+
+            <TextView
+                android:id="@+id/lunchRecipesClick"
+                android:layout_gravity="center|right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:textColor="@color/darker_pink"
+                style="@style/TextIcon"
+                android:text="@string/fa_arrow_right"
+                android:textSize="40sp"
+                android:onClick="lunchClicked"/>
+        </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_lunch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <FrameLayout
+            android:id="@+id/frameDinner"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/dinner_Text"
+            android:textSize="40sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/darker_pink"
+            android:background="@color/white"
+            android:paddingLeft="10sp"
+            android:textStyle="bold"
+            android:text="@string/dinner"/>
+
+        <TextView
+            android:id="@+id/dinnerRecipesClick"
+            android:layout_gravity="center|right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+            android:textSize="40sp"
+            android:textColor="@color/darker_pink"
+            style="@style/TextIcon"
+            android:text="@string/fa_arrow_right"
+            android:onClick="dinnerClicked"/>
+        </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_dinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        <FrameLayout
+            android:id="@+id/frameDessert"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/dessert_Text"
+            android:textSize="40sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingLeft="10sp"
+            android:textColor="@color/darker_pink"
+            android:textStyle="bold"
+            android:text="@string/dessert"/>
+
+            <TextView
+                android:id="@+id/dessertRecipesClick"
+                android:layout_gravity="center|right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:textColor="@color/darker_pink"
+                style="@style/TextIcon"
+                android:textSize="40sp"
+                android:text="@string/fa_arrow_right"
+                android:onClick="dessertClicked"/>
+
+        </FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_dessert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+    </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:id="@+id/progress_bar_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"/>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>

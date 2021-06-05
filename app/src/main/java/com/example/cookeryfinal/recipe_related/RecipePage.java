@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.cookeryfinal.MainActivity;
 import com.example.cookeryfinal.R;
 import com.example.cookeryfinal.user_related.OnSingleUserRetrievedListener;
 import com.example.cookeryfinal.user_related.User;
@@ -110,6 +111,8 @@ public class RecipePage extends AppCompatActivity {
                         byte[] decodedString = Base64.decode(retrieved_recipe.getImage(), Base64.DEFAULT);
                         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString,0, decodedString.length);
                         recipe_image.setImageBitmap(bitmap);
+                    }else{
+                        recipe_image.setImageResource(R.drawable.no_image);
                     }
 
                     for(Ingredient ingredient: retrieved_recipe.getIngredients()) {
@@ -117,7 +120,6 @@ public class RecipePage extends AppCompatActivity {
                     }
 
                 }catch(NullPointerException e){
-                    Toast.makeText(getApplicationContext(), "failed Recipe Page", Toast.LENGTH_LONG).show();
                     }
             }
         });
@@ -140,16 +142,16 @@ public class RecipePage extends AppCompatActivity {
                 liked_checker = false;
                 liked_recipes.remove(recipe_key);
                 like_btn.setImageResource(R.drawable.ic_dislike);
-                Toast.makeText(this, "Рецепт удален из 'Понравившихся'!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "рецепт удален из 'Понравившихся'!", Toast.LENGTH_LONG).show();
             } else {
                 liked_recipes.add(recipe_key);
                 liked_checker = true;
                 like_btn.setImageResource(R.drawable.ic_like_orange);
-                Toast.makeText(this, "Рецепт добавлен в 'Понравившиеся'!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "рецепт добавлен в 'Понравившиеся'!", Toast.LENGTH_LONG).show();
             }
             current_user.setLiked(liked_recipes);
         }else {
-            Toast.makeText(this, "Чтобы лайкнуть рецепт, необходимо зарегистироваться или войти", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "чтобы лайкнуть рецепт, необходимо зарегистироваться или войти", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -167,5 +169,11 @@ public class RecipePage extends AppCompatActivity {
             liked_checker = false;
             like_btn.setImageResource(R.drawable.ic_dislike);
         }
+    }
+
+    public void arrowRecipePageClicked(View v){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        RecipePage.this.finish();
     }
 }

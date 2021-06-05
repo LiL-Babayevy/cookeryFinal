@@ -4,6 +4,7 @@ package com.example.cookeryfinal.ui;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,10 +14,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookeryfinal.MainActivity;
 import com.example.cookeryfinal.R;
+import com.example.cookeryfinal.recipe_related.Ingredient;
 import com.example.cookeryfinal.recipe_related.OnRecipeRetrievedListener;
 import com.example.cookeryfinal.recipe_related.Recipe;
 import com.example.cookeryfinal.recipe_related.RecipeDataProvider;
@@ -55,7 +59,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
     private SearchView.OnQueryTextListener queryTextListener;
     private RecipeDataProvider provider;
     private OnRecipeRetrievedListener listener;
-    private TextView breakfast_txt, lunch_txt, dinner_txt, dessert_txt;
+    private FrameLayout lunchFr, dinnerFr, dessertFr, breakfastFr;
 
     private DownloadData downloadData = null;
 
@@ -68,10 +72,10 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
         root = inflater.inflate(R.layout.fragment_home, container, false);
         recipeArrayList = new ArrayList<>();
 
-        breakfast_txt = root.findViewById(R.id.breakfast_text);
-        lunch_txt = root.findViewById(R.id.lunch_Text);
-        dinner_txt = root.findViewById(R.id.dinner_Text);
-        dessert_txt = root.findViewById(R.id.dessert_Text);
+        breakfastFr = root.findViewById(R.id.frameBreakfast);
+        lunchFr = root.findViewById(R.id.frameLunch);
+        dinnerFr = root.findViewById(R.id.frameDinner);
+        dessertFr = root.findViewById(R.id.frameDessert);
 
         mRecyclerView = root.findViewById(R.id.recyclerView_search);
         mRecyclerView_breakfast = root.findViewById(R.id.recyclerView_breakfast);
@@ -121,10 +125,10 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                 mRecyclerView_dessert.setAdapter(null);
                 mRecyclerView_lunch.setAdapter(null);
 
-                breakfast_txt.setVisibility(View.INVISIBLE);
-                lunch_txt.setVisibility(View.INVISIBLE);
-                dessert_txt.setVisibility(View.INVISIBLE);
-                dinner_txt.setVisibility(View.INVISIBLE);
+                breakfastFr.setVisibility(View.INVISIBLE);
+                lunchFr.setVisibility(View.INVISIBLE);
+                dessertFr.setVisibility(View.INVISIBLE);
+                dinnerFr.setVisibility(View.INVISIBLE);
 
                 mLayoutManager = new LinearLayoutManager(getContext());
                 mRecyclerView.setLayoutManager(mLayoutManager);
@@ -147,6 +151,7 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                 if (searchView != null) {
                     searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
 
+
                     queryTextListener = new SearchView.OnQueryTextListener() {
                         @Override
                         public boolean onQueryTextChange(String newText) {
@@ -159,8 +164,11 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
                             }
 
                             for(Recipe r : recipeArrayList){
-                                if(!(r.getRecipe_name().contains(newText.trim()))){
-                                    filtered_recipeArrayList.remove(r);
+                                for(Ingredient ingredient: r.getIngredients()){
+                                    if(!(r.getRecipe_name().contains(newText.trim()))
+                                            && !(ingredient.getIngredient_name().contains(newText.trim()))){
+                                        filtered_recipeArrayList.remove(r);
+                                    }
                                 }
                             }
 
@@ -182,10 +190,10 @@ public class HomeFragment extends Fragment implements RectangleRecipeAdapter.OnR
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 mRecyclerView.setAdapter(null);
 
-                breakfast_txt.setVisibility(View.VISIBLE);
-                lunch_txt.setVisibility(View.VISIBLE);
-                dessert_txt.setVisibility(View.VISIBLE);
-                dinner_txt.setVisibility(View.VISIBLE);
+                breakfastFr.setVisibility(View.VISIBLE);
+                lunchFr.setVisibility(View.VISIBLE);
+                dessertFr.setVisibility(View.VISIBLE);
+                dinnerFr.setVisibility(View.VISIBLE);
 
                 setHorizontalRecyclerView(mRecyclerView_breakfast, "завтрак");
                 setHorizontalRecyclerView(mRecyclerView_lunch, "обед");

@@ -85,18 +85,6 @@ public class LogIn extends AppCompatActivity {
                 }
             }
         });
-
-//        if(current_user != null){
-//            if(current_user.getEmail().equals(email) && current_user.getUser_password().equals(passwrd)){
-//                Intent mainPage = new Intent(getApplicationContext(), MainActivity.class);
-//                mainPage.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-//                startActivity(mainPage);
-//            }else {
-//                // If sign in fails, display a message to the user.
-//                Toast.makeText(LogIn.this, "электронный адрес или пароль введен неверно",
-//                        Toast.LENGTH_SHORT).show();
-//            }
-//        }
     }
 
 

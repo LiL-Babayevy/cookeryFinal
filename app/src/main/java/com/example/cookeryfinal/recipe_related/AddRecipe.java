@@ -54,8 +54,6 @@ public class AddRecipe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("Добавление рецепта");
         setContentView(R.layout.activity_add_recipe);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.darker_pink)));
         set_image = findViewById(R.id.imageView);
 
         recipeDataProvider = RecipeDataProvider.getInstance();
@@ -75,15 +73,12 @@ public class AddRecipe extends AppCompatActivity {
 
         cooking_steps = findViewById(R.id.addCookingSteps);
 
+        //установка спиннера для выбора категории
         userDataProvider = UserDataProvider.getInstance();
         category_spinner = findViewById(R.id.CategorySpinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-        // Определяем разметку для использования при выборе элемента
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Применяем адаптер к элементу spinner
         category_spinner.setAdapter(adapter);
-
-
         category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -96,17 +91,6 @@ public class AddRecipe extends AppCompatActivity {
 
             }
         });
-
-//        for(int i = 0; i < ingredients.getChildCount(); i++){
-//            View frameIngredient = ingredients.getChildAt(i);
-//            Button b = frameIngredient.findViewById(R.id.DeleteIngredient);
-//            b.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    ingredients.removeView(frameIngredient);
-//                }
-//            });
-//        }
     }
 
     @Override
@@ -125,15 +109,22 @@ public class AddRecipe extends AppCompatActivity {
         ingredients.addView(addIngredient());
     }
 
+    //добавление ингредиента
     public View addIngredient(){
         View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.edit_ingredient, null);
         EditText name = view.findViewById(R.id.editIngredientName);
-        name.setHint("ingredient");
-//        Button delete = view.findViewById(R.id.DeleteIngredient);
-//        listOfButt.add(delete);
+        name.setHint("Ингредиент");
+        Button delete = view.findViewById(R.id.DeleteIngredient);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ingredients.removeView(view);
+            }
+        });
         return view;
     }
 
+    //сохранение рецепта в черновики
     public void btnSaveClicked(View view){
         recipe.setCooking_steps(cooking_steps.getText().toString());
         EditText recipeName = findViewById(R.id.addRecipeName);
@@ -160,6 +151,7 @@ public class AddRecipe extends AppCompatActivity {
         AddRecipe.this.finish();
     }
 
+    //публикация рецепта
     public void btnPostClicked(View view){
         for(int i = 0; i < ingredients.getChildCount(); i++){
             View frameIngredient = ingredients.getChildAt(i);
@@ -201,6 +193,7 @@ public class AddRecipe extends AppCompatActivity {
     }
 
 
+    //проверка(заполнено поле или нет)
     public void checkIsEmpty(String s, EditText edit){
         if(s.isEmpty()){
             edit.setError("заполните поле");
@@ -208,6 +201,7 @@ public class AddRecipe extends AppCompatActivity {
     }
 
 
+    //выбор фото
     public void setImage(View v){
         String[] options = new String[]{"Сделать фото", "Загрузить из галереи"};
         AlertDialog.Builder image_set_dialog = new AlertDialog.Builder(this);
@@ -227,6 +221,7 @@ public class AddRecipe extends AppCompatActivity {
         image_set_dialog.show();
     }
 
+    //сохранение фото в рецепт
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -248,7 +243,4 @@ public class AddRecipe extends AppCompatActivity {
             }
         }
     }
-
-
-
 }

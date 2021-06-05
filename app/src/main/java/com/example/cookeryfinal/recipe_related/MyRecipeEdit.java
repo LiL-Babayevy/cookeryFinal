@@ -37,7 +37,7 @@ public class MyRecipeEdit extends AppCompatActivity {
     private EditText editCookingSteps;
     private ImageView recipe_image;
     private RecipeDataProvider recipeDataProvider;
-    private String recipe_key, updated_name, updated_cookingSteps;
+    private String recipe_key, updated_name, updated_cookingSteps, image;
     private Spinner category_spinner;
     private LinearLayout ingredientList;
     private Recipe recipe = new Recipe();
@@ -72,12 +72,8 @@ public class MyRecipeEdit extends AppCompatActivity {
         category_spinner = findViewById(R.id.CategorySpinner);
         category_spinner.setPrompt(recipe.getRecipe_Category());
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
-        // Определяем разметку для использования при выборе элемента
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Применяем адаптер к элементу spinner
         category_spinner.setAdapter(adapter);
-
-
         category_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -104,6 +100,7 @@ public class MyRecipeEdit extends AppCompatActivity {
                         byte[] decodedString = Base64.decode(retrieved_recipe.getImage(), Base64.DEFAULT);
                         Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString,0, decodedString.length);
                         recipe_image.setImageBitmap(bitmap);
+                        recipe.setImage(retrieved_recipe.getImage());
                     }
 
                 }catch (NullPointerException e){
@@ -120,6 +117,13 @@ public class MyRecipeEdit extends AppCompatActivity {
         name.setText(current.getIngredient_name());
         EditText amount = view.findViewById(R.id.editIngredientAmount);
         amount.setText(current.getAmount());
+        Button delete = view.findViewById(R.id.DeleteIngredient);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ingredientList.removeView(view);
+            }
+        });
         ingredientList.addView(view);
     }
 
@@ -134,6 +138,13 @@ public class MyRecipeEdit extends AppCompatActivity {
         View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.edit_ingredient, null);
         EditText name = view.findViewById(R.id.editIngredientName);
         name.setHint("ingredient");
+        Button delete = view.findViewById(R.id.DeleteIngredient);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ingredientList.removeView(view);
+            }
+        });
         ingredientList.addView(view);
     }
 
@@ -237,9 +248,5 @@ public class MyRecipeEdit extends AppCompatActivity {
                 }catch (Exception e){}
             }
         }
-    }
-
-    public void removeIngredientClicked(View v){
-
     }
 }

@@ -1,21 +1,15 @@
 package com.example.cookeryfinal;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.cookeryfinal.recipe_related.DefaultRecipes;
 import com.example.cookeryfinal.user_related.User;
 import com.example.cookeryfinal.user_related.UserAuth;
 import com.example.cookeryfinal.user_related.UserDataProvider;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 
@@ -66,11 +60,14 @@ public class Register extends AppCompatActivity {
         if(!user_password1.equals(user_password2)){
             password2.setError("Пароль введен неверно");
         }
+        if(!isEmailValid(user_email)){
+            email.setError("Неверный электронный адрес");
+        }
 
 
         if((!user_email.equals("") || user_email != null) && (!user_name.equals("") || user_name != null)
                 && (!user_password1.equals("") || user_password1 != null) && (user_password2.equals("") || user_password2 != null)
-                && user_password1.equals(user_password2) && user_password1.length() >= 6) {
+                && user_password1.equals(user_password2) && user_password1.length() >= 6 &&isEmailValid(user_email)) {
             User user = new User();
             user.setEmail(email.getText().toString());
             user.setName(name.getText().toString());
@@ -88,18 +85,7 @@ public class Register extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        FirebaseUser currentUser = userAuth.getmAuth().getCurrentUser();
-//        if(currentUser != null){
-//            reload();
-//        }
-//    }
-
-    private void reload() { }
-
-    private void updateUI(FirebaseUser user) {
-
+    public boolean isEmailValid(String email){
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }

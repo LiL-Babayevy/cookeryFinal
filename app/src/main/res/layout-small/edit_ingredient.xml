@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp">
+
+
+    <EditText
+        android:id="@+id/editIngredientName"
+        android:layout_gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"/>
+
+    <EditText
+        android:id="@+id/editIngredientAmount"
+        android:layout_gravity="center_vertical|right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"/>
+
+    <Button
+        android:id="@+id/DeleteIngredient"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:background="@drawable/delete_item"
+        android:layout_gravity="right"/>
+</FrameLayout>

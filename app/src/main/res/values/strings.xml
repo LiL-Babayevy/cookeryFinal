@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CookeryFinal</string>
+    <string name="app_name">Cookery</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -32,7 +32,8 @@
     <string name="fa_heart">\uf004</string>
     <string name="fa_edit">\uf044</string>
     <string name="fa_plus_circle">\uf055</string>
-    <string name="fa_arrow_right">\uf061</string>
+    <string name="fa_arrow_right">\uf054</string>
+    <string name="fa_arrow_left">\uf060</string>
     <string name="enter_name">Введите имя:</string>
     <string name="enter_email">Введите e-mail:</string>
     <string name="enter_password">Введите пароль:</string>

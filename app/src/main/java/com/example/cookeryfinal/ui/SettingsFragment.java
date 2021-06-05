@@ -122,7 +122,7 @@ public class SettingsFragment extends Fragment{
             saveChangesTxt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(),"Изменения сохранены!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"изменения сохранены!", Toast.LENGTH_SHORT).show();
                     userDataProvider.updateUser(current_user);
                 }
             });
@@ -136,7 +136,7 @@ public class SettingsFragment extends Fragment{
                     change_email.setTitle("Изменение электронного адреса");
                     View dialogLayout = inflater.inflate(R.layout.dialog_layout, null);
                     EditText edit = dialogLayout.findViewById(R.id.addItemEditText);
-                    edit.setHint("введите новый электронный адрес");
+                    edit.setHint("Введите новый электронный адрес");
                     change_email.setView(dialogLayout);
                     change_email.setPositiveButton("изменить", new DialogInterface.OnClickListener() {
                                 @Override
@@ -166,7 +166,7 @@ public class SettingsFragment extends Fragment{
 
                     View dialogLayout = inflater.inflate(R.layout.dialog_layout, null);
                     EditText edit = dialogLayout.findViewById(R.id.addItemEditText);
-                    edit.setHint("введите новое имя");
+                    edit.setHint("Введите новое имя");
                     change_name.setView(dialogLayout);
                     change_name.setPositiveButton("изменить", new DialogInterface.OnClickListener() {
                         @Override
@@ -318,11 +318,12 @@ public class SettingsFragment extends Fragment{
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void onEmailEditClicked(View v){
-        if(!newEmail.isEmpty()){
+        if(!newEmail.isEmpty() && isEmailValid(newEmail)){
             current_user.setEmail(newEmail);
             my_email.setText(newEmail);
             saveChangesTxt.setTextColor(getResources().getColor(R.color.orange_red));
-//            Toast.makeText(getContext(), "электронный адрес изменен", Toast.LENGTH_LONG).show();
+        }else{
+            Toast.makeText(getContext(), "Некорректный электронный адрес", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -331,7 +332,6 @@ public class SettingsFragment extends Fragment{
             current_user.setName(newName);
             my_name.setText(newName);
             saveChangesTxt.setTextColor(getResources().getColor(R.color.orange_red));
-//            Toast.makeText(getContext(), "имя изменено", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -344,7 +344,7 @@ public class SettingsFragment extends Fragment{
             }
             my_password.setText(secret_password);
             saveChangesTxt.setTextColor(getResources().getColor(R.color.orange_red));
-//            Toast.makeText(getContext(), "пароль изменен", Toast.LENGTH_LONG).show();
+//            Toast.makeText(getContext(), "пароль изменен", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -393,7 +393,7 @@ public class SettingsFragment extends Fragment{
     public void changeUserIcon(){
         current_user.setImage(resID);
         user_icon.setImageResource(resID);
-//        Toast.makeText(getContext(), "иконка изменена", Toast.LENGTH_LONG).show();
+//        Toast.makeText(getContext(), "иконка изменена", Toast.LENGTH_SHORT).show();
         saveChangesTxt.setTextColor(getResources().getColor(R.color.orange_red));
     }
 
@@ -420,5 +420,9 @@ public class SettingsFragment extends Fragment{
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
         getActivity().finish();
         startActivity(intent);
+    }
+
+    public boolean isEmailValid(String email){
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }

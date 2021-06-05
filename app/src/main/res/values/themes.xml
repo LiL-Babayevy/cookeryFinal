@@ -18,6 +18,11 @@
 
     <style name="Theme.AddRecipe.ActionBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/white_blue</item>
+        <item name="colorPrimaryVariant">@color/darker_pink</item>
+        <item name="colorOnPrimary">@color/orange_red</item>
+        <item name="colorSecondary">@color/darker_pink</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="Theme.DownLoadActivity" parent="Theme.MaterialComponents.DayNight.NoActionBar">

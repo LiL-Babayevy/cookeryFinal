@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookeryfinal.GridSpacingItemDecoration;
 import com.example.cookeryfinal.LogIn;
+import com.example.cookeryfinal.recipe_related.AddRecipe;
 import com.example.cookeryfinal.recipe_related.MyRecipeEdit;
 import com.example.cookeryfinal.R;
 import com.example.cookeryfinal.Register;
@@ -30,6 +32,7 @@ import com.example.cookeryfinal.recipe_related.RecipePage;
 import com.example.cookeryfinal.recipe_related.SquareRecipeAdapter;
 import com.example.cookeryfinal.user_related.User;
 import com.example.cookeryfinal.user_related.UserAuth;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -52,14 +55,14 @@ public class DraftsFragment extends Fragment implements SquareRecipeAdapter.OnRe
                              ViewGroup container, Bundle savedInstanceState) {
         userAuth = new UserAuth(getContext());
         current_user = userAuth.getSignedInUser();
+        //установка лейаута в зависимости от того, вошел пользователь в аккаунт или нет
         if(current_user != null){
             root = inflater.inflate(R.layout.fragment_drafts, container, false);
-
-
             recipeArrayList = new ArrayList<>();
             mLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
             sqr_recipe_adapter = new SquareRecipeAdapter(recipeArrayList, this);
 
+            //заполнение листа для отображения рецептов на странице
             OnRecipeRetrievedListener listener = new OnRecipeRetrievedListener() {
                 @Override
                 public void onRecipeRetrieved(ArrayList<Recipe> recipes) {
@@ -72,6 +75,14 @@ public class DraftsFragment extends Fragment implements SquareRecipeAdapter.OnRe
             };
             provider = RecipeDataProvider.getInstance();
             provider.getDraftRecipes(current_user.getDatabase_key(), listener);
+            FloatingActionButton fab = root.findViewById(R.id.fabDrafts);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(getContext(), AddRecipe.class);
+                    startActivity(intent);
+                }
+            });
 
         }else{
             root = inflater.inflate(R.layout.blank_fragments, container, false);
@@ -109,8 +120,9 @@ public class DraftsFragment extends Fragment implements SquareRecipeAdapter.OnRe
             recyclerView.setLayoutManager(mLayoutManager);
             recyclerView.setAdapter(sqr_recipe_adapter);
         }
-
     }
+
+
 
     @Override
     public void onRecipeClick(Recipe recipe) {
@@ -145,7 +157,7 @@ public class DraftsFragment extends Fragment implements SquareRecipeAdapter.OnRe
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 provider.deleteRecipe(recipe);
-                                Toast.makeText(getContext(), "Рецепт удален!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), "рецепт удален!", Toast.LENGTH_LONG).show();
                             }
 
                         });

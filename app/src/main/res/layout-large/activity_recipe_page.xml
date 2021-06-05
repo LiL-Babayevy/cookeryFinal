@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".recipe_related.RecipePage"
+    android:background="@color/white_blue"
+    android:fadingEdgeLength="0dp">
+
+    <ScrollView
+
+        android:layout_margin="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="113dp"
+        tools:layout_editor_absoluteY="97dp">
+
+        <LinearLayout
+            android:elevation="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:textSize="30sp"
+                    android:textColor="@color/darker_pink"
+                    android:textStyle="bold"
+                    style="@style/TextIcon"
+                    android:text="@string/fa_arrow_left"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="arrowRecipePageClicked"/>
+
+
+                <ImageView
+                    android:id="@+id/LikeIcon"
+                    android:src="@drawable/ic_dislike"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_gravity="right"
+                    android:gravity="right"
+                    android:layout_weight="1"
+                    android:textSize="30sp"
+                    android:onClick="likeRecipe"/>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/RecipePageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="35sp"
+                android:gravity="center_vertical"
+                app:layout_constraintVertical_bias="1.0"/>
+
+
+            <ImageView
+                android:id="@+id/RecipePageImage"
+                android:layout_below="@+id/RecipePageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="600dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/category"
+                    android:layout_weight="1"
+                    android:textSize="30sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/Category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textSize="30sp"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/RecipePageIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@color/darker_pink"
+                android:paddingLeft="2dp"
+                android:text="@string/ingredients"
+                android:textColor="@color/white_pink"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/ListOfIngredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+            <TextView
+                android:id="@+id/RecipePageCookingSteps"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#F29C72"
+                android:paddingLeft="2dp"
+                android:text="@string/cookingsteps"
+                android:textColor="@color/white_pink"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/CookStepsTxt"
+                android:textSize="30sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:id="@+id/CopyIcon"
+                style="@style/SecondTextIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fa_copy"
+                android:textColor="@color/light_pink"
+                android:textSize="40sp" />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
